@@ -1,0 +1,176 @@
+import React, { Component } from 'react';
+import { Form } from "react-bootstrap";
+<% pluralName = operation.tags.find(x => x.name === "Plural").value %>
+<% retrunType = operation.parameters.find(parameter=>parameter.direction==='return').type %>
+<% inputType = operation.parameters.find(parameter=>parameter.direction!=='return').type %>
+export class Ui<%= info.name + operation.name %> extends Component {
+  static displayName = Ui<%= info.name + operation.name %>.name;
+
+  constructor(props) {
+    super(props);
+    this.defaultInput = { <%- helper.getDefaultValues(inputType.attributes) %> }
+    this.state = { <%= _case.camel(info.name + pluralName) %>: [], loading: true, formData: this.defaultInput, errors: {}, <%= inputType.attributes.filter(x=>x.type.stereotype.name!=="Primitive").map(attr=> _case.camel(attr.name + 'Options') + ": []" ) %> };
+  }
+
+  componentDidMount() {
+<% inputType.attributes.filter(x=>x.type.stereotype.name!=="Primitive").forEach(attr=> {  %>
+      this.populate<%= attr.type.tags.find(x => x.name === "Plural").value %>Data()
+<% }) %>
+      this.populate<%= info.name + pluralName %>Data();
+  }
+
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    this.populate<%= info.name + pluralName %>Data();
+  }
+
+
+  render<%= info.name + pluralName %>Table(<%= _case.camel(info.name + pluralName) %>) {
+    return (
+      <table className='table table-striped' aria-labelledby="tabelLabel">
+        <thead>
+          <tr>
+<% retrunType.attributes.forEach(attr=> { %>
+            <th><%= attr.tags.find(x=>x.name==="Description").value %></th>
+<% }) %>
+          </tr>
+        </thead>
+        <tbody>
+          {<%= _case.camel(info.name + pluralName) %>.map(<%= _case.camel(info.name + operation.name) %> =>
+            <tr>
+<% retrunType.attributes.forEach(attr=> { %>
+              <td>{<%= _case.camel(info.name + operation.name) %>.<%= attr.type.stereotype.name==='Primitive' ? _case.camel(attr.name) : _case.camel(attr.name+ "Id")  %>}</td>
+<% }) %>
+            </tr>
+          )}
+          
+        </tbody>
+      </table>
+    );
+  }
+
+  <% 
+const renderInteger = (required, name, description)=>{ %>
+                    <Form.Group className="mb-3" >
+                        <Form.Label><%= description %></Form.Label>
+                        <Form.Control <%= required ? "required" : "" %> isInvalid={this.state.errors.<%= name %>} type="number" value={this.state.formData.<%= _case.camel(name) %>} onChange={(event) => this.setState({ formData: { ...this.state.formData, <%= _case.camel(name) %>: event.target.value ==="" ? null : event.target.value } })} />
+                        <Form.Control.Feedback type='invalid'>
+                            {this.state.errors.<%= name %>}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+<% 
+    }
+const renderText = (required, name, description)=>{ %>
+                    <Form.Group className="mb-3" >
+                        <Form.Label><%= description %></Form.Label>
+                        <Form.Control <%= required ? "required" : "" %> isInvalid={this.state.errors.<%= name %>} type="text" value={this.state.formData.<%= _case.camel(name) %>} onChange={(event) => this.setState({ formData: { ...this.state.formData, <%= _case.camel(name) %>: event.target.value } })} />
+                        <Form.Control.Feedback type='invalid'>
+                            {this.state.errors.<%= name %>}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+<% 
+    }
+const renderDateTime = (required, name, description)=>{ %>
+                    <Form.Group className="mb-3" >
+                        <div><p className="form-label" > <%= description %> </p>
+                            <DatePicker selected={this.state.formData.<%= _case.camel(name) %>} onChange={(event) => this.setState({ formData: { ...this.state.formData, <%= _case.camel(name) %>: event} })} <%= required ? "required" : "" %> />
+                            <Form.Control type="hidden" isInvalid={this.state.errors.<%= name %>}  />
+                            <Form.Control.Feedback type='invalid'>
+                                {this.state.errors.<%= name %>}
+                            </Form.Control.Feedback>
+                        </div>
+                    </Form.Group>
+<% 
+    } 
+ const renderBoolean = (required, name, description)=>{ %>
+                    <Form.Group className="mb-3" >
+                        <Form.Check type="checkbox" label="<%= description %>" checked={this.state.formData.<%= _case.camel(name) %>} onChange={(event) => this.setState({ formData: { ...this.state.formData, <%= _case.camel(name) %>: !this.state.formData.<%= _case.camel(name) %> }})} />
+                        <Form.Control type="hidden" isInvalid={this.state.errors.<%= name %>} />
+                        <Form.Control.Feedback type='invalid'>
+                            {this.state.errors.<%= name %>}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+<% 
+    } 
+const renderComplex = (required, name, description, idName)=>{  %>
+  
+
+                    <Form.Group className="mb-3" >
+                        <Form.Label><%= description %></Form.Label>
+                        <Form.Select isInvalid={this.state.errors.<%= name %>Id} value={this.state.formData.<%= _case.camel(name) %>Id} onChange={(event) => this.setState({ formData: { ...this.state.formData, <%= _case.camel(name) %>Id: event.target.value } })} aria-label="<%= description %>">
+                            <option key={-1} value={-1}>Null</option>
+                            {this.state.<%= _case.camel(name+ 'Options') %>.map(<%= _case.camel(name)%> => <option key={<%= _case.camel(name) %>.<%= _case.camel(idName) %>} value={<%= _case.camel(name) %>.<%= _case.camel(idName) %>}>{<%= _case.camel(name) %>.<%= _case.camel(idName) %>}</option>)}
+
+                        </Form.Select>
+                        <Form.Control.Feedback type='invalid'>
+                            {this.state.errors.<%= name %>Id}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+
+<%
+                } 
+%>
+
+  render() {
+    let contents = this.state.loading
+      ? <p><em>Loading...</em></p>
+      : this.render<%= info.name + pluralName %>Table(this.state.<%= _case.camel(info.name + pluralName) %>);
+
+    return (
+      <div>
+        <h1 id="tabelLabel" ><%= info.name + operation.name %></h1>
+        <Form id="my-form" onSubmit={this.handleSubmit}>
+<%
+inputType.attributes.filter(x=>!x.isID).forEach(attr=> {  
+const description = attr.tags.find(x => x.name == "Description").value 
+const required = attr.tags.find(x => x.name == "Required").checked 
+    switch (attr.type.name) {
+        case "Integer":
+            renderInteger(required, attr.name, description)
+            break;
+        case "Text":
+            renderText(required, attr.name, description)
+            break;
+        case "DateTime":
+            renderDateTime(required, attr.name, description)
+            break;
+        case "Bit":
+            renderBoolean(required, attr.name, description)
+            break;
+        default:
+            renderComplex(required, attr.name, description, attr.type.attributes.find(x=>x.isID).name)   
+            break;
+    } 
+}) %>
+      <button form="my-form" type="submit" className='btn btn-primary' > Zobrazit </button>
+      </Form>
+        {contents}
+      </div>
+    );
+  }
+
+  async populate<%=  info.name + pluralName %>Data() {
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(this.state.formData)
+    };
+    this.setState({  loading: true });
+    const response = await fetch('<%= _case.camel( info.name) %>/<%= _case.camel(operation.name) %>', requestOptions);
+    const data = await response.json();
+    this.setState({ <%= _case.camel(info.name + pluralName) %>: data, loading: false });
+  }
+
+  
+<% inputType.attributes.filter(x=>x.type.stereotype.name!=="Primitive").forEach(attr=> {  %>
+    async populate<%= attr.type.tags.find(x => x.name === "Plural").value %>Data(id) {
+        const response = await fetch('<%= attr.type.name.toLowerCase() %>');
+        const data = await response.json();
+        this.setState({ <%= _case.camel(attr.name+ 'Options') %>: data });
+    }
+<% }) %>
+
+
+}
+

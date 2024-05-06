@@ -1,0 +1,22 @@
+using Microsoft.EntityFrameworkCore;
+using <%= info.namespace %>.Models;
+
+namespace <%= info.namespace %>
+{
+    public class ApplicationDbContext : DbContext
+    {
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options) { }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+        }
+
+<% for (const model of entities) { -%>
+        public DbSet<<%- model.name  %>> <%= model.name %> { get; set; }
+
+<% } -%>
+
+    }
+}

@@ -1,0 +1,81 @@
+
+using Microsoft.EntityFrameworkCore;
+using ReactSample;
+using ReactSample.Models;
+
+namespace <%= info.namespace %>Test.Seeders
+{
+
+    public class DefaultSeeder : ISeeder
+    {
+
+<% for (const model of entities) { -%>
+   
+<%
+const override = new Map();
+model.attributes.filter(x=> x.type.stereotype.name!=="Primitive").forEach(attr => {
+    override.set(attr.name+"Id", "1")
+});
+%>
+
+    virtual protected List<<%- model.name  %>> <%= model.tags.find(x => x.name === "Plural").value %>
+        {
+            get
+            {
+                return new List<<%- model.name  %>>{
+
+    <% for(var i=0; i< count; i++) { -%>
+                    <%- include("faker-object-initializer", {model: model, override:  new Map([...override, ...new Map().set('Id', i+1)])  } ) -%>,
+    <% } %>
+            };
+        }
+    }
+
+
+<% } -%>
+
+    public virtual List<object> GetAll()
+    {
+        var retD = new List<object>();
+<% for(const model of entities) { -%>
+        retD.AddRange(<%- model.tags.find(x => x.name === "Plural").value  %>);
+<% } %>
+        return retD;
+    }
+
+
+    public void Seed(ApplicationDbContext dbContext)
+    {
+        GetAll().ForEach(x =>
+        {
+            dbContext.AddRange(x);
+            dbContext.SaveChanges();
+        });
+    }
+
+    public void Clear(ApplicationDbContext dbContext)
+    {
+        var tables = GetAll().Select((x => x.GetType())).Distinct().Reverse();
+        foreach (var table in tables)
+        {
+            var myClassTableName = dbContext.Model.FindEntityType(table);
+
+            if (myClassTableName != null)
+                dbContext.Database.ExecuteSqlRaw(
+                    "DELETE FROM " + myClassTableName.GetTableName()
+                );
+        }
+    }
+
+
+}
+
+
+
+
+}
+
+
+
+
+

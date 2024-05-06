@@ -1,0 +1,11 @@
+{
+    "id": "react-core",
+    "name": "React .NET Core",
+    "schema": {
+      "react-core.project-path": {
+        "text": "Project path",
+        "type": "string",
+        "default": ""
+      }
+    }
+  }

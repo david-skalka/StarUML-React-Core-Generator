@@ -1,0 +1,191 @@
+import React, { Component } from 'react';
+import { Modal, Form } from "react-bootstrap";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
+export class Madal<%= model.name %> extends Component {
+
+  static displayName = Madal<%= model.name %>.name;
+
+  constructor(props) {
+      super(props);
+      this.handleOnShow = this.handleOnShow.bind(this);
+      this.handleSubmit = this.handleSubmit.bind(this);
+      this.defaultFormData = { <%- helper.getDefaultValues(model.attributes) %> }
+      this.state = {
+          formData: this.defaultFormData, errors: {}, <%= model.attributes.filter(x=>x.type.stereotype.name!=="Primitive").map(attr=> _case.camel(attr.name + 'Options') + ": []" ) %>
+      };
+  }
+
+    componentDidMount() {
+       
+    }
+
+    handleOnShow() {
+        this.setState({ formData: this.defaultFormData, errors: [] })
+        if (this.props.data.id !== 0) {
+            this.populate<%= model.name %>Data(this.props.data.id);
+        }
+
+<% model.attributes.filter(x=>x.type.stereotype.name!=="Primitive").forEach(attr=> {  %>
+        this.populate<%= attr.type.tags.find(x => x.name === "Plural").value %>Data()
+<% }) %>
+        
+    }
+
+    async handleSubmit(event) {
+        
+        event.preventDefault();
+
+        const requestOptions = {
+            method: this.state.formData.id===0 ? 'POST' : 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(this.state.formData)
+        };
+        const response = await fetch('<%= model.name.toLowerCase() %>', requestOptions);
+
+        const json = await response.json()
+        if (json.status === 400) {
+            this.setState({ errors: json.errors })
+        } else {
+            this.props.requestCloseHandler()
+        }
+
+        
+
+     
+    }
+
+    render() {
+
+ 
+
+    return (
+        <Modal
+            show={this.props.data!=null}
+            onHide={this.props.requestCloseHandler}
+            onShow={this.handleOnShow }
+            aria-labelledby="ModalHeader">
+            <Modal.Header closeButton >
+                <Modal.Title id="ModalHeader"><%= model.name %></Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <Form id="my-form" onSubmit={this.handleSubmit}>
+<% 
+const renderInteger = (required, name, description)=>{ %>
+                    <Form.Group className="mb-3" >
+                        <Form.Label><%= description %></Form.Label>
+                        <Form.Control <%= required ? "required" : "" %> isInvalid={this.state.errors.<%= name %>} type="number" value={this.state.formData.<%= _case.camel(name) %>} onChange={(event) => this.setState({ formData: { ...this.state.formData, <%= _case.camel(name) %>: event.target.value ==="" ? null : event.target.value } })} />
+                        <Form.Control.Feedback type='invalid'>
+                            {this.state.errors.<%= name %>}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+<% 
+    }
+const renderText = (required, name, description)=>{ %>
+                    <Form.Group className="mb-3" >
+                        <Form.Label><%= description %></Form.Label>
+                        <Form.Control <%= required ? "required" : "" %> isInvalid={this.state.errors.<%= name %>} type="text" value={this.state.formData.<%= _case.camel(name) %>} onChange={(event) => this.setState({ formData: { ...this.state.formData, <%= _case.camel(name) %>: event.target.value } })} />
+                        <Form.Control.Feedback type='invalid'>
+                            {this.state.errors.<%= name %>}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+<% 
+    }
+const renderDateTime = (required, name, description)=>{ %>
+                    <Form.Group className="mb-3" >
+                        <div><p className="form-label" > <%= description %> </p>
+                            <DatePicker selected={this.state.formData.<%= _case.camel(name) %>} onChange={(event) => this.setState({ formData: { ...this.state.formData, <%= _case.camel(name) %>: event} })} <%= required ? "required" : "" %> />
+                            <Form.Control type="hidden" isInvalid={this.state.errors.<%= name %>}  />
+                            <Form.Control.Feedback type='invalid'>
+                                {this.state.errors.<%= name %>}
+                            </Form.Control.Feedback>
+                        </div>
+                    </Form.Group>
+<% 
+    } 
+ const renderBoolean = (required, name, description)=>{ %>
+                    <Form.Group className="mb-3" >
+                        <Form.Check type="checkbox" label="<%= description %>" checked={this.state.formData.<%= _case.camel(name) %>} onChange={(event) => this.setState({ formData: { ...this.state.formData, <%= _case.camel(name) %>: !this.state.formData.<%= _case.camel(name) %> }})} />
+                        <Form.Control type="hidden" isInvalid={this.state.errors.<%= name %>} />
+                        <Form.Control.Feedback type='invalid'>
+                            {this.state.errors.<%= name %>}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+<% 
+    } 
+const renderComplex = (required, name, description, idName)=>{  %>
+  
+
+                    <Form.Group className="mb-3" >
+                        <Form.Label><%= description %></Form.Label>
+                        <Form.Select isInvalid={this.state.errors.<%= name %>Id} value={this.state.formData.<%= _case.camel(name) %>Id} onChange={(event) => this.setState({ formData: { ...this.state.formData, <%= _case.camel(name) %>Id: event.target.value } })} aria-label="<%= description %>">
+                            <option key={-1} value={-1}>Null</option>
+                            {this.state.<%= _case.camel(name+ 'Options') %>.map(<%= _case.camel(name)%> => <option key={<%= _case.camel(name) %>.<%= _case.camel(idName) %>} value={<%= _case.camel(name) %>.<%= _case.camel(idName) %>}>{<%= _case.camel(name) %>.<%= _case.camel(idName) %>}</option>)}
+
+                        </Form.Select>
+                        <Form.Control.Feedback type='invalid'>
+                            {this.state.errors.<%= name %>Id}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+
+<%
+                } 
+model.attributes.filter(x=>!x.isID).forEach(attr=> {  
+const description = attr.tags.find(x => x.name == "Description").value 
+const required = attr.tags.find(x => x.name == "Required").checked 
+    switch (attr.type.name) {
+        case "Integer":
+            renderInteger(required, attr.name, description)
+            break;
+        case "Text":
+            renderText(required, attr.name, description)
+            break;
+        case "DateTime":
+            renderDateTime(required, attr.name, description)
+            break;
+        case "Bit":
+            renderBoolean(required, attr.name, description)
+            break;
+        default:
+            renderComplex(required, attr.name, description, attr.type.attributes.find(x=>x.isID).name)   
+            break;
+    } 
+}) %>
+                </Form>
+
+            </Modal.Body>
+            <Modal.Footer>
+                <button form="my-form" type="submit" className='btn btn-primary' >
+                    Save
+                </button>
+                <button onClick={this.props.requestCloseHandler} className='btn btn-primary' >
+                    Close
+                </button>
+            </Modal.Footer>
+        </Modal>
+    );
+    }
+
+
+
+    async populate<%= model.name %>Data(id) {
+        const response = await fetch('<%= model.name.toLowerCase() %>/' + id);
+        const data = await response.json();
+        this.setState({ formData: data });
+    }
+
+<% model.attributes.filter(x=>x.type.stereotype.name!=="Primitive").forEach(attr=> {  %>
+    async populate<%= attr.type.tags.find(x => x.name === "Plural").value %>Data(id) {
+        const response = await fetch('<%= attr.type.name.toLowerCase() %>');
+        const data = await response.json();
+        this.setState({ <%= _case.camel(attr.name+ 'Options') %>: data });
+    }
+<% }) %>
+
+
+
+
+}
+
+

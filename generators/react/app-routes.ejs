@@ -1,0 +1,21 @@
+import { Home } from "./components/Home";
+<% const imports = entities.map(model=>  model.name ).concat(entities.flatMap(model=>model.operations.map(operation=> model.name +  operation.name ))) -%>
+<% for (const _import of imports) { -%>
+import { Ui<%= _import %> } from "./components/Ui<%= _import %>";
+<% } %>
+
+const AppRoutes = [
+  {
+    index: true,
+    element: <Home />
+  },
+<% const routes = entities.map(model=>{return  { path: _case.kebab(model.name), name: model.name }}).concat(entities.flatMap(model=>model.operations.map(operation=> { return { path: _case.kebab(model.name) + '/' +  _case.kebab(operation.name), name: model.name + operation.name }} ))) -%>
+<% for (const route of routes) { -%>
+  {
+    path: '/ui-<%= route.path %>',
+    element: <Ui<%= route.name %> />
+  },
+<% } %>
+];
+
+export default AppRoutes;

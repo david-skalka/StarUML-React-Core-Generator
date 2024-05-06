@@ -1,0 +1,22 @@
+<%
+    function getFakeValue(type){
+        switch (type) {
+            case "Integer":
+                return faker.number.int({max:2147483647});
+            case "Text":
+                return `"${faker.internet.userName()}"`;
+            default: 
+                throw new Error("Not supported type: " + type)
+        }
+    }
+
+  
+    function getData(attributes, override) {
+        const values = new Map();
+        attributes.filter(x=>x.type.stereotype.name==="Primitive").forEach(attribut => values.set( attribut.name, getFakeValue(attribut.type.name) ));
+        attributes.filter(x=>x.type.stereotype.name!=="Primitive").forEach(attribut => values.set( attribut.name + "Id", faker.number.int({max:2147483647}) ));
+        override.forEach((v, k)=> values.set(k, v));
+        return Array.from(values, ([key, value]) => ({ key, value })).filter(x=>x.value!==null);
+    }
+
+%>new <%= model.name%>(){<%- getData(model.attributes, override).map(x=> x.key + '=' + x.value ).join(", ")%>}

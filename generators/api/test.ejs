@@ -1,0 +1,139 @@
+<%
+
+function getFkOverride(){
+    const override = new Map();
+    model.attributes.filter(x=>x.type.stereotype.name!=="Primitive" ).forEach(attr => override.set(attr.name+"Id", "1"));
+    return override;
+}
+const id = model.attributes.find(x=>typeof x.isID );
+
+const updateOverride = getFkOverride().set(id.name, "1");
+const createOverride = getFkOverride().set(id.name, null);
+
+
+%>
+
+using System.Net.Http.Json;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.DependencyInjection;
+using <%= info.namespace %>;
+using <%= info.namespace %>.Models;
+using <%= info.namespace %>.ApiModels;
+namespace <%= info.namespace %>Test
+{
+    public class <%= model.name %>Test
+    {
+
+        protected readonly CustomWebApplicationFactory<Program> Factory = new();
+
+        protected readonly HttpClient Client;
+        
+        public <%= model.name %>Test()
+        {
+            Client = Factory.CreateClient(
+                new WebApplicationFactoryClientOptions { AllowAutoRedirect = false }
+            );
+        
+        
+        }
+        
+        [SetUp]
+        public void DbSetup()
+        {
+            if (TestContext.CurrentContext.Test.Properties.Get("Seeder") is string seeder)
+            {
+                ISeeder seederInstance = (ISeeder)Activator.CreateInstance(Type.GetType(seeder)!)!;
+                seederInstance
+                    .Seed(
+                        Factory
+                            .Services.CreateScope()
+                            .ServiceProvider.GetRequiredService<ApplicationDbContext>()
+                    );
+            }
+        
+        
+        
+        
+        }
+        
+        [TearDown]
+        public void DbTeardown()
+        {
+            if (TestContext.CurrentContext.Test.Properties.Get("Seeder") is string seeder)
+            {
+                ISeeder seederInstance = (ISeeder)Activator.CreateInstance(Type.GetType(seeder)!)!;
+                seederInstance
+                    .Clear(
+                            Factory
+                                .Services.CreateScope()
+                                .ServiceProvider.GetRequiredService<ApplicationDbContext>()
+                        );
+            }
+        }
+
+
+        [OneTimeTearDown]
+        public void Dispose()
+        {
+            Client.Dispose();
+            Factory.Dispose();
+        }
+
+
+        [Test, Property("Seeder", "<%= info.namespace %>Test.Seeders.DefaultSeeder")]
+        public async Task <%= model.name %>GetTest()
+        {
+            var defaultPage = await Client.GetAsync("/<%= model.name %>");
+            defaultPage.EnsureSuccessStatusCode();
+        }
+
+        [Test, Property("Seeder", "<%= info.namespace %>Test.Seeders.DefaultSeeder")]
+        public async Task <%= model.name %>GetOneTest()
+        {
+            var defaultPage = await Client.GetAsync("/<%= model.name %>/1");
+            defaultPage.EnsureSuccessStatusCode();
+        }
+
+        [Test, Property("Seeder", "<%= info.namespace %>Test.Seeders.DefaultSeeder")]
+        public async Task <%= model.name %>CreateTest()
+        {
+            var arg = <%- include("faker-object-initializer", {model, override: createOverride}) %>; 
+            var defaultPage = await Client.PostAsJsonAsync("/<%= model.name %>", arg); 
+            defaultPage.EnsureSuccessStatusCode();
+        }
+
+
+        [Test, Property("Seeder", "<%= info.namespace %>Test.Seeders.DefaultSeeder")]
+        public async Task <%= model.name %>UpdateTest()
+        {
+            var arg = <%- include("faker-object-initializer", {model, override: updateOverride}) %>; 
+            var defaultPage = await Client.PutAsJsonAsync("/<%= model.name %>", arg); 
+            defaultPage.EnsureSuccessStatusCode();
+        }
+
+
+        
+        [Test, Property("Seeder", "<%= info.namespace %>Test.Seeders.DefaultSeeder")]
+        public async Task <%= model.name %>DeleteTest()
+        {
+            var defaultPage = await Client.DeleteAsync("/<%= model.name %>/1"); 
+            defaultPage.EnsureSuccessStatusCode();
+
+        }
+
+
+
+<% model.operations.forEach(operation=> {  %>
+        [Test, Property("Seeder", "<%= info.namespace %>Test.Seeders.DefaultSeeder")]
+        public async Task <%= operation.name %>Test()
+        {
+            var arg = <%- include("faker-object-initializer", { model:  operation.parameters.find(parameter=>parameter.direction!=='return').type, override: new Map() }) %>; 
+            var defaultPage = await Client.PostAsJsonAsync("/<%= model.name %>/<%= operation.name %>", arg); 
+            defaultPage.EnsureSuccessStatusCode();
+        }
+<% }) %>
+
+
+
+    }
+}

@@ -1,0 +1,86 @@
+import React, { Component } from 'react';
+import { Madal<%= model.name %> } from "./Modal<%= model.name %>";
+<% pluralName = model.tags.find(x => x.name === "Plural").value %>
+export class Ui<%= model.name %> extends Component {
+  static displayName = Ui<%= model.name %>.name;
+
+  constructor(props) {
+    super(props);
+    this.state = { forecasts: [], loading: true, modalData: null };
+    this.handleCloseModal = this.handleCloseModal.bind(this);
+    this.handleOpenModal = this.handleOpenModal.bind(this);
+  }
+
+  componentDidMount() {
+    this.populate<%= pluralName %>Data();
+  }
+
+  handleCloseModal() {
+        this.setState({ modalData: null });
+        this.populate<%= pluralName %>Data();
+  }
+
+  handleOpenModal(id) {
+        this.setState({ modalData: {id: id} });
+  }
+
+  async handleDelete(id) {
+        const requestOptions = {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+        };
+        await fetch('<%= _case.camel(model.name) %>/' + id, requestOptions);
+        this.populate<%= pluralName %>Data();
+  }
+
+  render<%= pluralName %>Table(<%= pluralName.toLowerCase() %>) {
+    return (
+      <table className='table table-striped' aria-labelledby="tabelLabel">
+        <thead>
+          <tr>
+<% model.attributes.forEach(attr=> { %>
+            <th><%= attr.tags.find(x=>x.name==="Description").value %></th>
+<% }) %>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {<%= _case.camel(pluralName) %>.map(<%= _case.camel(model.name) %> =>
+            <tr key={<%= model.name.toLowerCase() %>.id}>
+<% model.attributes.forEach(attr=> { %>
+              <td>{<%= _case.camel(model.name) %>.<%= attr.type.stereotype.name==='Primitive' ? _case.camel(attr.name) : _case.camel(attr.name+ "Id")  %>}</td>
+<% }) %>
+              <td>
+                <button class="btn btn-secondary m-1" onClick={ _ => this.handleOpenModal(<%= _case.camel(model.name) %>.id)} type="button">Editovat</button>
+                <button class="btn btn-secondary m-1" onClick={ _ => this.handleDelete(<%= _case.camel(model.name) %>.id)} type="button">Smazat</button>
+              </td>
+            </tr>
+          )}
+          
+        </tbody>
+      </table>
+    );
+  }
+
+  render() {
+    let contents = this.state.loading
+      ? <p><em>Loading...</em></p>
+      : this.render<%= pluralName %>Table(this.state.forecasts);
+
+    return (
+      <div>
+        <h1 id="tabelLabel" ><%= pluralName %></h1>
+        <button class="btn btn-secondary" onClick={ _=>this.handleOpenModal(0)} type="button">Přidat</button>
+        <Madal<%= model.name %> data={this.state.modalData} requestCloseHandler={this.handleCloseModal} />
+        {contents}
+      </div>
+    );
+  }
+
+  async populate<%= pluralName %>Data() {
+    const response = await fetch('<%= _case.camel(model.name) %>');
+    const data = await response.json();
+    this.setState({ forecasts: data, loading: false });
+  }
+}
+

@@ -1,0 +1,64 @@
+using Microsoft.AspNetCore.Mvc;
+using <%= info.namespace %>.Models;
+using <%= info.namespace %>.ApiModels;
+namespace <%= info.namespace %>.Controllers
+{
+    [ApiController]
+    [Route("[controller]")]
+    public class <%= model.name %>Controller : ControllerBase
+    {
+
+        private readonly ILogger<<%= model.name %>Controller> _logger;
+        private readonly ApplicationDbContext _applicationDbContext;
+
+        public <%= model.name %>Controller(ILogger<<%= model.name %>Controller> logger, ApplicationDbContext applicationDbContext)
+        {
+            _logger = logger;
+            _applicationDbContext = applicationDbContext;
+        }
+
+        [HttpGet]
+        public IEnumerable<<%= model.name %>> Get()
+        {
+             return _applicationDbContext.<%= model.name %>.ToList();
+        }
+
+        [HttpGet("{id:int}")]
+        public ActionResult<<%= model.name %>> Get(int id)
+        {
+            return _applicationDbContext.<%= model.name %>.Single(x=>x.Id==id);
+        }
+
+        [HttpPost]
+        public ActionResult<<%= model.name %>> Create(<%= model.name %> data)
+        {
+            _applicationDbContext.<%= model.name %>.Add(data);
+            _applicationDbContext.SaveChanges();
+            return data;
+        }
+
+        [HttpPut]
+        public ActionResult<<%= model.name %>> Update(<%= model.name %> data)
+        {
+            _applicationDbContext.<%= model.name %>.Update(data);
+            _applicationDbContext.SaveChanges();
+            return data;
+        }
+
+        [HttpDelete("{id:int}")]
+        public ActionResult Delete(int id)
+        {
+            _applicationDbContext.<%= model.name %>.Remove(_applicationDbContext.<%= model.name %>.Single(x=>x.Id==id));
+            _applicationDbContext.SaveChanges();
+            return Ok();
+        }
+
+<% model.operations.forEach(operation=> {  %>
+        [HttpPost("<%= operation.name %>")]
+        public IEnumerable<<%= operation.parameters.find(parameter=>parameter.direction==='return').type.name %>> <%= operation.name %>(<%= operation.parameters.filter(parameter=>parameter.direction!=='return').map(parameter => parameter.type.name + " " + _case.camel(parameter.name) ).join(', ') %>){
+            return Array.Empty<<%= operation.parameters.find(parameter=>parameter.direction==='return').type.name %>>();
+        }
+<% }) %>
+
+    }
+}

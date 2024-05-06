@@ -1,0 +1,15 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using NUnit.Framework.Interfaces;
+using ReactSample;
+using ReactSample.Models;
+
+namespace <%= info.namespace %>Test
+{
+    public interface ISeeder
+    {
+        void Clear(ApplicationDbContext applicationDbContext);
+        void Seed(ApplicationDbContext dbContext);
+    }
+  
+}
