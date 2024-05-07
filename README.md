@@ -1,4 +1,4 @@
-<h1 align="center">Welcome to StarUML React .NET Core Generator 👋</h1>
+<h1 align="center">Welcome to StarUML React Core Generator 👋</h1>
 <p>
   <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
   <img src="https://img.shields.io/badge/staruml-%3E%3D6.0.0-blue.svg" />

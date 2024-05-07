@@ -86,19 +86,21 @@ describe("Render templates", () => {
     ejs.renderFile(path.dirname(__dirname) + '/generators/api/iseeder.ejs', { info: { namespace: "ReactSample" }}, (err, data) => { console.log(data); expect(err).toBe(null); });
   });
 
-
-  test("AppRoutes", () => {
-    const entities = this.diagram.filter(x=>x.stereotype && x.stereotype.name==="Entity");
-    const _case = Case;
-
-    const ttt = entities.map(model=>{return  { path: _case.kebab(model.name), name: model.name }}).concat(entities.flatMap(model=>model.operations.map(operation=> { return { path: _case.kebab(model.name) + '/' +  _case.kebab(operation.name), name: model.name + operation.name }} )))
-    ejs.renderFile(path.dirname(__dirname) + '/generators/react/app-routes.ejs', { entities: this.diagram.filter(x=>x.stereotype && x.stereotype.name==="Entity"), _case: Case}, (err, data) => { console.log(data); expect(err).toBe(null); });
-  });
-
   test("SetupProxy", () => {
     
     ejs.renderFile(path.dirname(__dirname) + '/generators/react/setup-proxy.ejs', { entities: this.diagram.filter(x=>x.stereotype && x.stereotype.name==="Entity"), _case: Case}, (err, data) => { console.log(data); expect(err).toBe(null); });
   });
+
+  test("AppRoutes", () => {
+    ejs.renderFile(path.dirname(__dirname) + '/generators/react/app-routes.ejs', { entities: this.diagram.filter(x=>x.stereotype && x.stereotype.name==="Entity"), _case: Case}, (err, data) => { console.log(data); expect(err).toBe(null); });
+  });
+
+  test("NavMenu", () => {
+    ejs.renderFile(path.dirname(__dirname) + '/generators/react/nav-menu.ejs', { entities: this.diagram.filter(x=>x.stereotype && x.stereotype.name==="Entity"), _case: Case}, (err, data) => { console.log(data); expect(err).toBe(null); });
+  });
+
+
+
 
   
 

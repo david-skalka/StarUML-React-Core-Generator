@@ -4,7 +4,7 @@
             "id": "tools",
             "submenu": [
                 {
-                    "label": "React .NET Core",
+                    "label": "React Core",
                     "id": "react-core",
                     "submenu": [
                         {
@@ -31,6 +31,11 @@
                             "label": "Generate app routes",
                             "id": "react-core.generate-app-routes",
                             "command": "react-core:generate-app-routes"
+                        },
+                        {
+                            "label": "Generate nav menu",
+                            "id": "react-core.generate-nav-menu",
+                            "command": "react-core:generate-nav-menu"
                         },
                         {
                             "label": "Generate entity",

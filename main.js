@@ -47,6 +47,12 @@ function init() {
   );
 
   app.commands.register(
+    "react-core:generate-nav-menu",
+    (arg) => commandExecutor("generate-nav-menu", arg),
+    "Generate nav menu"
+  );
+
+  app.commands.register(
     "react-core:generate-entity",
     (arg) => commandExecutor("generate-entity", arg),
     "Generate Entity"
@@ -71,6 +77,7 @@ async function commandExecutor(name, arg) {
   tasksMap.set("generate-setup-proxy", generateSetupProxy);
   tasksMap.set("generate-app-routes", generateAppRoutes);
   tasksMap.set("generate-entity", generateEntity);
+  tasksMap.set("generate-nav-menu", generateNavMenu);
   tasksMap.set("export-metadata", exportMetadata);
   
   const task = tasksMap.get(name);
@@ -259,7 +266,12 @@ async function generateAppRoutes() {
 }
 
 
-
+async function generateNavMenu() {
+  const projectPath = getProjectPath();
+  const fileWriter = confirmWriteFileSync
+  await copyEjs(__dirname + '/generators/react/nav-menu.ejs', projectPath + `\\Web\\ClientApp\\src\\components\\NavMenu.js`, { entities: app.repository.select("@UMLClass").filter(x => x.stereotype && x.stereotype.name === "Entity"), _case: Case  }, fileWriter)
+  app.toast.info("NavMenu generated");
+}
 
 
 function exportMetadata(path) {
