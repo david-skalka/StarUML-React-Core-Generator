@@ -1,6 +1,6 @@
 <h1 align="center">Welcome to StarUML React Core Generator 👋</h1>
 <p>
-  <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
+  <img alt="Version" src="https://img.shields.io/badge/version-0.0.1-blue.svg?cacheSeconds=2592000" />
   <img src="https://img.shields.io/badge/staruml-%3E%3D6.0.0-blue.svg" />
   <a href="#" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
@@ -40,7 +40,7 @@
 ## Usage
 1. Open `test\data\sample.mdj`
 2. Open (`File > Preference > React .NET Core`) and fill Project path
-3. Click the menu (`Tools > React .NET Core `) and execute every steps for generate whole application
+3. Click on the menu (Tools > React .NET Core ) and perform all the steps to generate the entire application
 4. Run generated solution in Visual studio
 
 ## Example
