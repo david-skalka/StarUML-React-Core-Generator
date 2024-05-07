@@ -164,6 +164,39 @@
 				"width": 40,
 				"height": 40
 			}
+		},
+		{
+			"_type": "UMLClass",
+			"_id": "AAAAAAGPUpGqeTew0wQ=",
+			"_parent": {
+				"$ref": "AAAAAAGOPa3j3cdMV7g="
+			},
+			"name": "Bool",
+			"stereotype": {
+				"$ref": "AAAAAAGOUUAWQC/o2C8="
+			}
+		},
+		{
+			"_type": "UMLClass",
+			"_id": "AAAAAAGPUpGzUTe0yso=",
+			"_parent": {
+				"$ref": "AAAAAAGOPa3j3cdMV7g="
+			},
+			"name": "DateTime",
+			"stereotype": {
+				"$ref": "AAAAAAGOUUAWQC/o2C8="
+			}
+		},
+		{
+			"_type": "UMLClass",
+			"_id": "AAAAAAGPUpJGPTe6LLI=",
+			"_parent": {
+				"$ref": "AAAAAAGOPa3j3cdMV7g="
+			},
+			"name": "Decimal",
+			"stereotype": {
+				"$ref": "AAAAAAGOUUAWQC/o2C8="
+			}
 		}
 	]
 }

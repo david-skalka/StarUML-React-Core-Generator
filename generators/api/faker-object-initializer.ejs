@@ -5,6 +5,12 @@
                 return faker.number.int({max:2147483647});
             case "Text":
                 return `"${faker.internet.userName()}"`;
+            case "Decimal":
+                return faker.number.float({max:2147483647}) + 'm';
+            case "DateTime":
+                return 'DateTime.Parse("' + faker.date.anytime().toISOString() +'").ToUniversalTime()';
+            case "Bool":
+                return faker.number.int({max:1})===0 ? "false" : "true";
             default: 
                 throw new Error("Not supported type: " + type)
         }
