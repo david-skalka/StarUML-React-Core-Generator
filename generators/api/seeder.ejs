@@ -37,8 +37,8 @@ model.attributes.filter(x=> x.type.stereotype.name!=="Primitive").forEach(attr =
     public virtual List<object> GetAll()
     {
         var retD = new List<object>();
-<% for(const model of entities) { -%>
-        retD.AddRange(<%- model.tags.find(x => x.name === "Plural").value  %>);
+<% for(const entity of entityDependecySort(entities)) { -%>
+        retD.AddRange(<%- entity.tags.find(x => x.name === "Plural").value  %>);
 <% } %>
         return retD;
     }

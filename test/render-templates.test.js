@@ -6,6 +6,7 @@ const ModelWriter = require("../generators/api/model-writer.js");
 const ApiModelWriter = require("../generators/api/api-model-writer.js");
 const { Case } = require('change-case-all');
 const reactHelper = require("../generators/react/helpers");
+const { entityDependecySort  } = require("../generators/api/helper");
 
 
 describe("Render templates", () => {
@@ -43,7 +44,7 @@ describe("Render templates", () => {
 
 
   test("Seed", () => {
-    ejs.renderFile(path.dirname(__dirname) + '/generators/api/seeder.ejs', { count: 10, entities: this.diagram.filter(x=>x.stereotype && x.stereotype.name==="Entity"), info: { namespace: "ReactSample" }, faker }, (err, data) => { console.log(data); expect(err).toBe(null); });
+    ejs.renderFile(path.dirname(__dirname) + '/generators/api/seeder.ejs', { count: 10, entities: this.diagram.filter(x => x.stereotype && x.stereotype.name === "Entity"), info: { namespace: "ReactSample" }, faker, entityDependecySort }, (err, data) => { console.log(data); expect(err).toBe(null); });
   });
 
 
@@ -68,41 +69,41 @@ describe("Render templates", () => {
 
 
   test("DbContext", () => {
-    ejs.renderFile(path.dirname(__dirname) + '/generators/api/db-context.ejs', { info: { namespace: "ReactSample" }, _case: Case, entities: this.diagram.filter(x=>x.stereotype && x.stereotype.name==="Entity") }, (err, data) => { console.log(data); expect(err).toBe(null); });
+    ejs.renderFile(path.dirname(__dirname) + '/generators/api/db-context.ejs', { info: { namespace: "ReactSample" }, _case: Case, entities: this.diagram.filter(x => x.stereotype && x.stereotype.name === "Entity") }, (err, data) => { console.log(data); expect(err).toBe(null); });
   });
 
 
   test("Program", () => {
-    ejs.renderFile(path.dirname(__dirname) + '/generators/api/program.ejs', { info: { namespace: "ReactSample" }}, (err, data) => { console.log(data); expect(err).toBe(null); });
+    ejs.renderFile(path.dirname(__dirname) + '/generators/api/program.ejs', { info: { namespace: "ReactSample" } }, (err, data) => { console.log(data); expect(err).toBe(null); });
   });
 
 
   test("CustomWebAppFactory", () => {
-    ejs.renderFile(path.dirname(__dirname) + '/generators/api/custom-web-app-factory.ejs', { info: { namespace: "ReactSample" }}, (err, data) => { console.log(data); expect(err).toBe(null); });
+    ejs.renderFile(path.dirname(__dirname) + '/generators/api/custom-web-app-factory.ejs', { info: { namespace: "ReactSample" } }, (err, data) => { console.log(data); expect(err).toBe(null); });
   });
 
 
   test("ISeeder", () => {
-    ejs.renderFile(path.dirname(__dirname) + '/generators/api/iseeder.ejs', { info: { namespace: "ReactSample" }}, (err, data) => { console.log(data); expect(err).toBe(null); });
+    ejs.renderFile(path.dirname(__dirname) + '/generators/api/iseeder.ejs', { info: { namespace: "ReactSample" } }, (err, data) => { console.log(data); expect(err).toBe(null); });
   });
 
   test("SetupProxy", () => {
-    
-    ejs.renderFile(path.dirname(__dirname) + '/generators/react/setup-proxy.ejs', { entities: this.diagram.filter(x=>x.stereotype && x.stereotype.name==="Entity"), _case: Case}, (err, data) => { console.log(data); expect(err).toBe(null); });
+
+    ejs.renderFile(path.dirname(__dirname) + '/generators/react/setup-proxy.ejs', { entities: this.diagram.filter(x => x.stereotype && x.stereotype.name === "Entity"), _case: Case }, (err, data) => { console.log(data); expect(err).toBe(null); });
   });
 
   test("AppRoutes", () => {
-    ejs.renderFile(path.dirname(__dirname) + '/generators/react/app-routes.ejs', { entities: this.diagram.filter(x=>x.stereotype && x.stereotype.name==="Entity"), _case: Case}, (err, data) => { console.log(data); expect(err).toBe(null); });
+    ejs.renderFile(path.dirname(__dirname) + '/generators/react/app-routes.ejs', { entities: this.diagram.filter(x => x.stereotype && x.stereotype.name === "Entity"), _case: Case }, (err, data) => { console.log(data); expect(err).toBe(null); });
   });
 
   test("NavMenu", () => {
-    ejs.renderFile(path.dirname(__dirname) + '/generators/react/nav-menu.ejs', { entities: this.diagram.filter(x=>x.stereotype && x.stereotype.name==="Entity"), _case: Case}, (err, data) => { console.log(data); expect(err).toBe(null); });
+    ejs.renderFile(path.dirname(__dirname) + '/generators/react/nav-menu.ejs', { entities: this.diagram.filter(x => x.stereotype && x.stereotype.name === "Entity"), _case: Case }, (err, data) => { console.log(data); expect(err).toBe(null); });
   });
 
 
 
 
-  
+
 
 
 

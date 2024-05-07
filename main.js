@@ -9,6 +9,7 @@ const reactHelper = require("./generators/react/helpers");
 const { modelSchema, classesSchema } = require('./joi-schemas.js');
 const ChildProcess = require("child_process");
 const _deepCopy = require('./deep-copy.js');
+const { entityDependecySort  } = require("./generators/api/helper");
 
 function init() {
 
@@ -237,7 +238,7 @@ async function generateSeeder() {
   const namespace = getNamespace();
   const fileWriter = confirmWriteFileSync
   const entities = app.repository.select("@UMLClass").filter(x => x.stereotype && x.stereotype.name === "Entity")
-  await copyEjs(__dirname + '/generators/api/seeder.ejs', projectPath + `\\ApiTest\\Seeders\\DefaultSeeder.cs`, { count: 10, entities, info: { namespace }, faker }, fileWriter)
+  await copyEjs(__dirname + '/generators/api/seeder.ejs', projectPath + `\\ApiTest\\Seeders\\DefaultSeeder.cs`, { count: 10, entities, info: { namespace }, faker, entityDependecySort }, fileWriter)
   app.toast.info("Seeder generated");
 }
 
