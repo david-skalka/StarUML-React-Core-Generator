@@ -5,11 +5,11 @@ const ApiModelWriter = require("./generators/api/api-model-writer.js");
 const { faker, en } = require("@faker-js/faker");
 const beautify = require("json-beautify");
 const { Case } = require('change-case-all');
-const reactHelper = require("./generators/react/helpers");
+const reactHelper = require("./generators/react/_helpers");
 const { modelSchema, classesSchema } = require('./joi-schemas.js');
 const ChildProcess = require("child_process");
 const _deepCopy = require('./deep-copy.js');
-const { entityDependecySort  } = require("./generators/api/helper");
+const { entityDependecySort  } = require("./generators/api/_helpers");
 
 function init() {
 

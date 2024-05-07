@@ -5,8 +5,8 @@ const { faker, en } = require("@faker-js/faker");
 const ModelWriter = require("../generators/api/model-writer.js");
 const ApiModelWriter = require("../generators/api/api-model-writer.js");
 const { Case } = require('change-case-all');
-const reactHelper = require("../generators/react/helpers");
-const { entityDependecySort  } = require("../generators/api/helper");
+const reactHelper = require("../generators/react/_helpers");
+const { entityDependecySort  } = require("../generators/api/_helpers");
 
 
 describe("Render templates", () => {

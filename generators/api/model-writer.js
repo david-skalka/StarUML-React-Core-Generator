@@ -1,4 +1,4 @@
-const {primitiveTypes, defaultValues} = require("./helper");
+const {primitiveTypes, defaultValues} = require("./_helpers");
 
 class ModelWriter {
   constructor(model, info) {
