@@ -145,7 +145,7 @@ async function generateEntity() {
   var classes = app.repository.select("@UMLClass").filter(x => x.stereotype && x.stereotype.name === "Entity")
   const { buttonId, returnValue } = await app.elementListPickerDialog.showDialog("Select a set of Class", classes);
 
-  const fileWriter = confirmWriteFileSync
+  
 
   const model = returnValue;
   if (buttonId === "ok") {
@@ -155,32 +155,24 @@ async function generateEntity() {
 
     if (buttonId === 'ok') {
 
-      var options = [
-        { text: "Api Controller", value: 1, factory: async () => await copyEjs(__dirname + '/generators/api/controller.ejs', projectPath + `\\Web\\Controllers\\${model.name}Controller.cs`, { model, info: { namespace }, _case: Case }, fileWriter)},
-        { text: "Api Model", value: 2, factory: () => Promise.resolve(fileWriter(projectPath + `\\Web\\Models\\${model.name}.cs`, new ModelWriter(model, { namespace: namespace + ".Models" }).getData())) },
-        { text: "Api Test", value: 4, factory: async () => await copyEjs(__dirname + '/generators/api/test.ejs', projectPath + `\\ApiTest\\${model.name}Test.cs`, { model, info: { namespace }, faker: faker }, fileWriter)},
-        { text: "React ui", value: 5, factory: async () => await copyEjs(__dirname + '/generators/react/ui.ejs', projectPath + `\\Web\\ClientApp\\src\\components\\Ui${model.name}.jsx`, { model, info: { namespace }, _case: Case }, fileWriter)},
-        { text: "React modal", value: 6, factory: async () => await copyEjs(__dirname + '/generators/react/modal.ejs', projectPath + `\\Web\\ClientApp\\src\\components\\Modal${model.name}.jsx`, { model, info: { namespace }, _case: Case, helper: reactHelper }, fileWriter) }
+      var files = [
+        { text: "Api Controller", factory: async () => await copyEjs(__dirname + '/generators/api/controller.ejs', projectPath + `\\Web\\Controllers\\${model.name}Controller.cs`, { model, info: { namespace }, _case: Case }, confirmWriteFileSync)},
+        { text: "Api Model",  factory: () => Promise.resolve(confirmWriteFileSync(projectPath + `\\Web\\Models\\${model.name}.cs`, new ModelWriter(model, { namespace: namespace + ".Models" }).getData())) },
+        { text: "Api Test", factory: async () => await copyEjs(__dirname + '/generators/api/test.ejs', projectPath + `\\ApiTest\\${model.name}Test.cs`, { model, info: { namespace }, faker: faker }, confirmWriteFileSync)},
+        { text: "React ui", factory: async () => await copyEjs(__dirname + '/generators/react/ui.ejs', projectPath + `\\Web\\ClientApp\\src\\components\\Ui${model.name}.jsx`, { model, info: { namespace }, _case: Case }, confirmWriteFileSync)},
+        { text: "React modal",  factory: async () => await copyEjs(__dirname + '/generators/react/modal.ejs', projectPath + `\\Web\\ClientApp\\src\\components\\Modal${model.name}.jsx`, { model, info: { namespace }, _case: Case, helper: reactHelper }, confirmWriteFileSync) }
       ];
-      let indexer = options.length+1;
+
       model.operations.forEach(operation => {
-        indexer++;
-        options.push({ text: "(o. " + operation.name + ") Api input model", value: indexer, factory: () => Promise.resolve(fileWriter(projectPath + `\\Web\\ApiModels\\${operation.parameters.find(parameter => parameter.direction !== 'return').type.name}.cs`, new ApiModelWriter(operation.parameters.find(parameter => parameter.direction !== 'return').type, { namespace: namespace + ".ApiModels" }).getData())) })
-        options.push({ text: "(o. " + operation.name + ") Api output model", value: indexer + 1, factory: () => Promise.resolve(fileWriter(projectPath + `\\Web\\ApiModels\\${operation.parameters.find(parameter => parameter.direction === 'return').type.name}.cs`, new ApiModelWriter(operation.parameters.find(parameter => parameter.direction === 'return').type, { namespace: namespace + ".ApiModels" }).getData())) })
-        options.push({ text: "(o. " + operation.name + ") React operation", value: indexer + 2, factory: async () => await copyEjs(__dirname + '/generators/react/operation.ejs', projectPath + `\\Web\\ClientApp\\src\\components\\Ui${model.name + operation.name}.jsx`, { operation, info: { name: model.name }, _case: Case, helper: reactHelper }, fileWriter) });
+        files.push({ text: "(o. " + operation.name + ") Api input model", factory: () => Promise.resolve(confirmWriteFileSync(projectPath + `\\Web\\ApiModels\\${operation.parameters.find(parameter => parameter.direction !== 'return').type.name}.cs`, new ApiModelWriter(operation.parameters.find(parameter => parameter.direction !== 'return').type, { namespace: namespace + ".ApiModels" }).getData())) })
+        files.push({ text: "(o. " + operation.name + ") Api output model", factory: () => Promise.resolve(confirmWriteFileSync(projectPath + `\\Web\\ApiModels\\${operation.parameters.find(parameter => parameter.direction === 'return').type.name}.cs`, new ApiModelWriter(operation.parameters.find(parameter => parameter.direction === 'return').type, { namespace: namespace + ".ApiModels" }).getData())) })
+        files.push({ text: "(o. " + operation.name + ") React operation", factory: async () => await copyEjs(__dirname + '/generators/react/operation.ejs', projectPath + `\\Web\\ClientApp\\src\\components\\Ui${model.name + operation.name}.jsx`, { operation, info: { name: model.name }, _case: Case, helper: reactHelper }, confirmWriteFileSync) });
       });
 
-      while (true) {
-        const { buttonId, returnValue } = await app.dialogs.showSelectRadioDialog("Select operation.", options);
-
-        if (buttonId !== 'ok') {
-          break;
-        }
-        const option = options.find(x => x.value === parseInt(returnValue));
-        await option.factory()
-        app.toast.info(option.text +  " generated");
+      for (const file of files) {
+        await file.factory();
+        app.toast.info(file.text +  " generated");
       }
-
     }
 
 
