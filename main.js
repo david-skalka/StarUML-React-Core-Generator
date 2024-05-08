@@ -156,9 +156,9 @@ async function generateEntity() {
     if (buttonId === 'ok') {
 
       await generateFile(__dirname + '/generators/api/controller.ejs', `\\Web\\Controllers\\${model.name}Controller.cs`, { model, info: { namespace }, _case: Case }, confirmWriteFileSync);
-      await generateFile(__dirname + '/generators/api/model.ejs',  `\\Web\\Models\\${model.name}.cs`, { model, info: { namespace: namespace + ".Models" }, primitiveTypes, defaultValues }, confirmWriteFileSync);
-      await generateFile(__dirname + '/generators/api/test.ejs',  `\\ApiTest\\${model.name}Test.cs`, { model, info: { namespace }, faker: faker }, confirmWriteFileSync);
-      await generateFile(__dirname + '/generators/react/ui.ejs',  `\\Web\\ClientApp\\src\\components\\Ui${model.name}.jsx`, { model, info: { namespace }, _case: Case }, confirmWriteFileSync)
+      await generateFile(__dirname + '/generators/api/model.ejs', `\\Web\\Models\\${model.name}.cs`, { model, info: { namespace: namespace + ".Models" }, primitiveTypes, defaultValues }, confirmWriteFileSync);
+      await generateFile(__dirname + '/generators/api/test.ejs', `\\ApiTest\\${model.name}Test.cs`, { model, info: { namespace }, faker: faker }, confirmWriteFileSync);
+      await generateFile(__dirname + '/generators/react/ui.ejs', `\\Web\\ClientApp\\src\\components\\Ui${model.name}.jsx`, { model, info: { namespace }, _case: Case }, confirmWriteFileSync)
       await generateFile(__dirname + '/generators/react/modal.ejs', `\\Web\\ClientApp\\src\\components\\Modal${model.name}.jsx`, { model, info: { namespace }, _case: Case, helper: reactHelper }, confirmWriteFileSync)
 
 
@@ -197,8 +197,8 @@ async function generatSolution() {
   ['ApiTest\\UnitTest1.cs', 'Web\\WeatherForecast.cs', 'Web\\Controllers\\WeatherForecastController.cs', 'Web\\Program.cs'].forEach(x => fs.unlinkSync(projectPath + '\\' + x));
   ['ApiTest\\Seeders', 'Web\\Models', 'Web\\ApiModels'].forEach(x => fs.mkdirSync(projectPath + '\\' + x));
 
-  await generateFile(__dirname + '/generators/api/program.ejs',  `\\Web\\Program.cs`, { info: { namespace } }, fileWriter)
-  await generateFile(__dirname + '/generators/api/custom-web-app-factory.ejs',  `\\ApiTest\\CustomWebApplicationFactory.cs`, { info: { namespace } }, fileWriter)
+  await generateFile(__dirname + '/generators/api/program.ejs', `\\Web\\Program.cs`, { info: { namespace } }, fileWriter)
+  await generateFile(__dirname + '/generators/api/custom-web-app-factory.ejs', `\\ApiTest\\CustomWebApplicationFactory.cs`, { info: { namespace } }, fileWriter)
   await generateFile(__dirname + '/generators/api/iseeder.ejs', `\\ApiTest\\ISeeder.cs`, { info: { namespace } }, fileWriter)
 
 
@@ -221,7 +221,7 @@ async function generateSetupProxy() {
 
 
 async function generateAppRoutes() {
-  await generateFile(__dirname + '/generators/react/app-routes.ejs', `\\Web\\ClientApp\\src\\AppRoutes.js`, { entities: getEntities(), _case: Case }, confirmWriteFileSync)  
+  await generateFile(__dirname + '/generators/react/app-routes.ejs', `\\Web\\ClientApp\\src\\AppRoutes.js`, { entities: getEntities(), _case: Case }, confirmWriteFileSync)
 }
 
 
