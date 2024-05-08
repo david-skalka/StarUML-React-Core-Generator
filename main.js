@@ -7,7 +7,8 @@ const reactHelper = require("./generators/react/_helpers");
 const { modelSchema, classesSchema } = require('./joi-schemas.js');
 const ChildProcess = require("child_process");
 const _deepCopy = require('./deep-copy.js');
-const { entityDependecySort, primitiveTypes, defaultValues  } = require("./generators/api/_helpers");
+const { entityDependecySort, primitiveTypes, defaultValues } = require("./generators/api/_helpers");
+const path = require("path");
 
 function init() {
 
@@ -38,7 +39,7 @@ function init() {
     "Generate setup proxy"
   );
 
-  
+
   app.commands.register(
     "react-core:generate-app-routes",
     () => commandExecutor(generateAppRoutes),
@@ -60,7 +61,7 @@ function init() {
 
   app.commands.register(
     "react-core:export-metadata",
-    (arg)=> commandExecutor(exportMetadata, arg),
+    (arg) => commandExecutor(exportMetadata, arg),
     "Export metadata"
   );
 
@@ -70,10 +71,10 @@ function init() {
 
 async function commandExecutor(task, arg) {
 
-  try{
+  try {
     validate();
     await task(arg);
-  } catch(e) {
+  } catch (e) {
     app.dialogs.showAlertDialog(e.message)
   }
 
@@ -82,9 +83,11 @@ async function commandExecutor(task, arg) {
 
 
 
-async function copyEjs(src, dest, varBag, writer) {
+async function generateFile(src, dest, varBag, writer) {
   const rendered = await ejs.renderFile(src, varBag);
-  writer(dest, rendered);
+  const projectPath = getProjectPath();
+  writer(path.join(projectPath, dest), rendered);
+  app.toast.info("Generated " + dest);
 }
 
 
@@ -105,7 +108,7 @@ function getProjectPath() {
 }
 
 
-function validate(){
+function validate() {
   var diagram = app.repository.select("@UMLModel");
 
   const validationResult = modelSchema.validate(diagram[0], {
@@ -148,33 +151,27 @@ async function generateEntity() {
   const model = returnValue;
   if (buttonId === "ok") {
 
-    const projectPath = getProjectPath();
     const namespace = getNamespace();
 
     if (buttonId === 'ok') {
 
-      var files = [
-        { text: "Api Controller", factory: async () => await copyEjs(__dirname + '/generators/api/controller.ejs', projectPath + `\\Web\\Controllers\\${model.name}Controller.cs`, { model, info: { namespace }, _case: Case }, confirmWriteFileSync)},
-        { text: "Api Model",  factory: async () => await copyEjs(__dirname + '/generators/api/model.ejs', projectPath + `\\Web\\Models\\${model.name}.cs`,{model, info: { namespace: namespace + ".Models" }, primitiveTypes, defaultValues}, confirmWriteFileSync  ) },
-        { text: "Api Test", factory: async () => await copyEjs(__dirname + '/generators/api/test.ejs', projectPath + `\\ApiTest\\${model.name}Test.cs`, { model, info: { namespace }, faker: faker }, confirmWriteFileSync)},
-        { text: "React ui", factory: async () => await copyEjs(__dirname + '/generators/react/ui.ejs', projectPath + `\\Web\\ClientApp\\src\\components\\Ui${model.name}.jsx`, { model, info: { namespace }, _case: Case }, confirmWriteFileSync)},
-        { text: "React modal",  factory: async () => await copyEjs(__dirname + '/generators/react/modal.ejs', projectPath + `\\Web\\ClientApp\\src\\components\\Modal${model.name}.jsx`, { model,  info: { namespace }, _case: Case, helper: reactHelper }, confirmWriteFileSync) }
-      ];
+      await generateFile(__dirname + '/generators/api/controller.ejs', `\\Web\\Controllers\\${model.name}Controller.cs`, { model, info: { namespace }, _case: Case }, confirmWriteFileSync);
+      await generateFile(__dirname + '/generators/api/model.ejs',  `\\Web\\Models\\${model.name}.cs`, { model, info: { namespace: namespace + ".Models" }, primitiveTypes, defaultValues }, confirmWriteFileSync);
+      await generateFile(__dirname + '/generators/api/test.ejs',  `\\ApiTest\\${model.name}Test.cs`, { model, info: { namespace }, faker: faker }, confirmWriteFileSync);
+      await generateFile(__dirname + '/generators/react/ui.ejs',  `\\Web\\ClientApp\\src\\components\\Ui${model.name}.jsx`, { model, info: { namespace }, _case: Case }, confirmWriteFileSync)
+      await generateFile(__dirname + '/generators/react/modal.ejs', `\\Web\\ClientApp\\src\\components\\Modal${model.name}.jsx`, { model, info: { namespace }, _case: Case, helper: reactHelper }, confirmWriteFileSync)
 
-      model.operations.forEach(operation => {
-        files.push({ text: "(o. " + operation.name + ") Api input model", factory: () => copyEjs(__dirname + '/generators/api/api-model.ejs', projectPath + `\\Web\\ApiModels\\${operation.parameters.find(parameter => parameter.direction !== 'return').type.name}.cs`,  {info: { namespace: namespace + ".ApiModels" }, model: operation.parameters.find(parameter => parameter.direction !== 'return').type, primitiveTypes, defaultValues},confirmWriteFileSync)})
-        files.push({ text: "(o. " + operation.name + ") Api output model", factory: () => copyEjs(__dirname + '/generators/api/api-model.ejs', projectPath + `\\Web\\ApiModels\\${operation.parameters.find(parameter => parameter.direction === 'return').type.name}.cs`,{ info: { namespace: namespace + ".ApiModels" }, model: operation.parameters.find(parameter => parameter.direction === 'return').type, primitiveTypes, defaultValues }, confirmWriteFileSync) })
-        files.push({ text: "(o. " + operation.name + ") React operation", factory: async () => await copyEjs(__dirname + '/generators/react/operation.ejs', projectPath + `\\Web\\ClientApp\\src\\components\\Ui${model.name + operation.name}.jsx`, { operation, info: { name: model.name }, _case: Case, helper: reactHelper }, confirmWriteFileSync) });
-      });
 
-      for (const file of files) {
-        await file.factory();
-        app.toast.info(file.text +  " generated");
+      for (operation of model.operations) {
+        await generateFile(__dirname + '/generators/api/api-model.ejs', `\\Web\\ApiModels\\${operation.parameters.find(parameter => parameter.direction !== 'return').type.name}.cs`, { info: { namespace: namespace + ".ApiModels" }, model: operation.parameters.find(parameter => parameter.direction !== 'return').type, primitiveTypes, defaultValues }, confirmWriteFileSync)
+        await generateFile(__dirname + '/generators/api/api-model.ejs', `\\Web\\ApiModels\\${operation.parameters.find(parameter => parameter.direction === 'return').type.name}.cs`, { info: { namespace: namespace + ".ApiModels" }, model: operation.parameters.find(parameter => parameter.direction === 'return').type, primitiveTypes, defaultValues }, confirmWriteFileSync)
+        await generateFile(__dirname + '/generators/react/operation.ejs', `\\Web\\ClientApp\\src\\components\\Ui${model.name + operation.name}.jsx`, { operation, info: { name: model.name }, _case: Case, helper: reactHelper }, confirmWriteFileSync)
       }
+
     }
 
 
-  } 
+  }
 
 
 }
@@ -197,53 +194,39 @@ async function generatSolution() {
   ChildProcess.execSync('dotnet add reference ../Web', { cwd: projectPath + '\\ApiTest' });
   ChildProcess.execSync('dotnet sln ' + namespace + '.sln add Web ApiTest', { cwd: projectPath });
 
-  ['ApiTest\\UnitTest1.cs', 'Web\\WeatherForecast.cs', 'Web\\Controllers\\WeatherForecastController.cs', 'Web\\Program.cs'].forEach(x =>fs.unlinkSync( projectPath + '\\' + x));
+  ['ApiTest\\UnitTest1.cs', 'Web\\WeatherForecast.cs', 'Web\\Controllers\\WeatherForecastController.cs', 'Web\\Program.cs'].forEach(x => fs.unlinkSync(projectPath + '\\' + x));
   ['ApiTest\\Seeders', 'Web\\Models', 'Web\\ApiModels'].forEach(x => fs.mkdirSync(projectPath + '\\' + x));
 
-  await copyEjs(__dirname + '/generators/api/program.ejs', projectPath + `\\Web\\Program.cs`, { info: { namespace }}, fileWriter)
-  await copyEjs(__dirname + '/generators/api/custom-web-app-factory.ejs', projectPath + `\\ApiTest\\CustomWebApplicationFactory.cs`, { info: { namespace } }, fileWriter)
-  await copyEjs(__dirname + '/generators/api/iseeder.ejs', projectPath + `\\ApiTest\\ISeeder.cs`, { info: { namespace } }, fileWriter)
+  await generateFile(__dirname + '/generators/api/program.ejs',  `\\Web\\Program.cs`, { info: { namespace } }, fileWriter)
+  await generateFile(__dirname + '/generators/api/custom-web-app-factory.ejs',  `\\ApiTest\\CustomWebApplicationFactory.cs`, { info: { namespace } }, fileWriter)
+  await generateFile(__dirname + '/generators/api/iseeder.ejs', `\\ApiTest\\ISeeder.cs`, { info: { namespace } }, fileWriter)
 
-  app.toast.info("Solution generated");
 
 }
 
 
 
 async function generateSeeder() {
-  const projectPath = getProjectPath();
-  const namespace = getNamespace();
-  const entities = getEntities();
-  await copyEjs(__dirname + '/generators/api/seeder.ejs', projectPath + `\\ApiTest\\Seeders\\DefaultSeeder.cs`, { count: 10, entities, info: { namespace }, faker, entityDependecySort }, confirmWriteFileSync)
-  app.toast.info("Seeder generated");
+  await generateFile(__dirname + '/generators/api/seeder.ejs', `\\ApiTest\\Seeders\\DefaultSeeder.cs`, { count: 10, entities: getEntities(), info: { namespace: getNamespace() }, faker, entityDependecySort }, confirmWriteFileSync)
 }
 
 
 async function generateDbContext() {
-  const namespace = getNamespace();
-  const projectPath = getProjectPath();
-  await copyEjs(__dirname + '/generators/api/db-context.ejs', projectPath + `\\Web\\ApplicationDbContext.cs`, { info: { namespace }, entities: getEntities() }, confirmWriteFileSync)
-  app.toast.info("DbContext generated");
+  await generateFile(__dirname + '/generators/api/db-context.ejs', `\\Web\\ApplicationDbContext.cs`, { info: { namespace: getNamespace() }, entities: getEntities() }, confirmWriteFileSync)
 }
 
 async function generateSetupProxy() {
-  const projectPath = getProjectPath();
-  await copyEjs(__dirname + '/generators/react/setup-proxy.ejs', projectPath + `\\Web\\ClientApp\\src\\setupProxy.js`, { entities: getEntities(), _case: Case  }, confirmWriteFileSync)
-  app.toast.info("setupProxy generated");
+  await generateFile(__dirname + '/generators/react/setup-proxy.ejs', `\\Web\\ClientApp\\src\\setupProxy.js`, { entities: getEntities(), _case: Case }, confirmWriteFileSync)
 }
 
 
 async function generateAppRoutes() {
-  const projectPath = getProjectPath();
-  await copyEjs(__dirname + '/generators/react/app-routes.ejs', projectPath + `\\Web\\ClientApp\\src\\AppRoutes.js`, { entities: getEntities(), _case: Case  }, confirmWriteFileSync)
-  app.toast.info("AppRoutes generated");
+  await generateFile(__dirname + '/generators/react/app-routes.ejs', `\\Web\\ClientApp\\src\\AppRoutes.js`, { entities: getEntities(), _case: Case }, confirmWriteFileSync)  
 }
 
 
 async function generateNavMenu() {
-  const projectPath = getProjectPath();
-  await copyEjs(__dirname + '/generators/react/nav-menu.ejs', projectPath + `\\Web\\ClientApp\\src\\components\\NavMenu.js`, { entities: getEntities(), _case: Case  }, confirmWriteFileSync)
-  app.toast.info("NavMenu generated");
+  await generateFile(__dirname + '/generators/react/nav-menu.ejs', `\\Web\\ClientApp\\src\\components\\NavMenu.js`, { entities: getEntities(), _case: Case }, confirmWriteFileSync)
 }
 
 
