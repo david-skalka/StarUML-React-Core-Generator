@@ -1,7 +1,5 @@
 const fs = require("fs");
 const ejs = require("ejs");
-const ModelWriter = require("./generators/api/model-writer.js");
-const ApiModelWriter = require("./generators/api/api-model-writer.js");
 const { faker, en } = require("@faker-js/faker");
 const beautify = require("json-beautify");
 const { Case } = require('change-case-all');
@@ -9,7 +7,7 @@ const reactHelper = require("./generators/react/_helpers");
 const { modelSchema, classesSchema } = require('./joi-schemas.js');
 const ChildProcess = require("child_process");
 const _deepCopy = require('./deep-copy.js');
-const { entityDependecySort  } = require("./generators/api/_helpers");
+const { entityDependecySort, primitiveTypes, defaultValues  } = require("./generators/api/_helpers");
 
 function init() {
 
@@ -157,15 +155,15 @@ async function generateEntity() {
 
       var files = [
         { text: "Api Controller", factory: async () => await copyEjs(__dirname + '/generators/api/controller.ejs', projectPath + `\\Web\\Controllers\\${model.name}Controller.cs`, { model, info: { namespace }, _case: Case }, confirmWriteFileSync)},
-        { text: "Api Model",  factory: () => Promise.resolve(confirmWriteFileSync(projectPath + `\\Web\\Models\\${model.name}.cs`, new ModelWriter(model, { namespace: namespace + ".Models" }).getData())) },
+        { text: "Api Model",  factory: async () => await copyEjs(__dirname + '/generators/api/model.ejs', projectPath + `\\Web\\Models\\${model.name}.cs`,{model, info: { namespace: namespace + ".Models" }, primitiveTypes, defaultValues}, confirmWriteFileSync  ) },
         { text: "Api Test", factory: async () => await copyEjs(__dirname + '/generators/api/test.ejs', projectPath + `\\ApiTest\\${model.name}Test.cs`, { model, info: { namespace }, faker: faker }, confirmWriteFileSync)},
         { text: "React ui", factory: async () => await copyEjs(__dirname + '/generators/react/ui.ejs', projectPath + `\\Web\\ClientApp\\src\\components\\Ui${model.name}.jsx`, { model, info: { namespace }, _case: Case }, confirmWriteFileSync)},
-        { text: "React modal",  factory: async () => await copyEjs(__dirname + '/generators/react/modal.ejs', projectPath + `\\Web\\ClientApp\\src\\components\\Modal${model.name}.jsx`, { model, info: { namespace }, _case: Case, helper: reactHelper }, confirmWriteFileSync) }
+        { text: "React modal",  factory: async () => await copyEjs(__dirname + '/generators/react/modal.ejs', projectPath + `\\Web\\ClientApp\\src\\components\\Modal${model.name}.jsx`, { model,  info: { namespace }, _case: Case, helper: reactHelper }, confirmWriteFileSync) }
       ];
 
       model.operations.forEach(operation => {
-        files.push({ text: "(o. " + operation.name + ") Api input model", factory: () => Promise.resolve(confirmWriteFileSync(projectPath + `\\Web\\ApiModels\\${operation.parameters.find(parameter => parameter.direction !== 'return').type.name}.cs`, new ApiModelWriter(operation.parameters.find(parameter => parameter.direction !== 'return').type, { namespace: namespace + ".ApiModels" }).getData())) })
-        files.push({ text: "(o. " + operation.name + ") Api output model", factory: () => Promise.resolve(confirmWriteFileSync(projectPath + `\\Web\\ApiModels\\${operation.parameters.find(parameter => parameter.direction === 'return').type.name}.cs`, new ApiModelWriter(operation.parameters.find(parameter => parameter.direction === 'return').type, { namespace: namespace + ".ApiModels" }).getData())) })
+        files.push({ text: "(o. " + operation.name + ") Api input model", factory: () => copyEjs(__dirname + '/generators/api/api-model.ejs', projectPath + `\\Web\\ApiModels\\${operation.parameters.find(parameter => parameter.direction !== 'return').type.name}.cs`,  {info: { namespace: namespace + ".ApiModels" }, model: operation.parameters.find(parameter => parameter.direction !== 'return').type, primitiveTypes, defaultValues},confirmWriteFileSync)})
+        files.push({ text: "(o. " + operation.name + ") Api output model", factory: () => copyEjs(__dirname + '/generators/api/api-model.ejs', projectPath + `\\Web\\ApiModels\\${operation.parameters.find(parameter => parameter.direction === 'return').type.name}.cs`,{ info: { namespace: namespace + ".ApiModels" }, model: operation.parameters.find(parameter => parameter.direction === 'return').type, primitiveTypes, defaultValues }, confirmWriteFileSync) })
         files.push({ text: "(o. " + operation.name + ") React operation", factory: async () => await copyEjs(__dirname + '/generators/react/operation.ejs', projectPath + `\\Web\\ClientApp\\src\\components\\Ui${model.name + operation.name}.jsx`, { operation, info: { name: model.name }, _case: Case, helper: reactHelper }, confirmWriteFileSync) });
       });
 

@@ -1,0 +1,23 @@
+using System.ComponentModel.DataAnnotations;
+    
+    namespace <%= info.namespace %>
+    {
+        public class <%= model.name %>
+        {
+
+          [Key]  
+          public int <%= model.attributes.find(x=>x.isID).name %> {get; set;}
+
+
+<% for (let attr of model.attributes.filter(x=>!x.isID)) { -%>
+<% const required = attr.tags.find(x => x.name == "Required").checked; -%>
+          <%= required ? '[Required] ': '' -%> 
+          public <%= (attr.type.stereotype.name==="Primitive" ? primitiveTypes.get(attr.type.name) : attr.type.name+ '?') + (required ? "" : "?") %> <%= attr.name %> { get; set; } <%= required && defaultValues.has(attr.type.name) ? " = " + defaultValues.get(attr.type.name) + ";" : "" %>
+
+<% if(attr.type.stereotype.name!=="Primitive"){ -%>
+          public int <%= attr.name %>Id { get; set; }
+          
+<% } -%>
+<% } %>
+        }
+    }

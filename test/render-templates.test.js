@@ -2,11 +2,9 @@ const fs = require("fs");
 const ejs = require("ejs");
 const path = require("path");
 const { faker, en } = require("@faker-js/faker");
-const ModelWriter = require("../generators/api/model-writer.js");
-const ApiModelWriter = require("../generators/api/api-model-writer.js");
 const { Case } = require('change-case-all');
 const reactHelper = require("../generators/react/_helpers");
-const { entityDependecySort  } = require("../generators/api/_helpers");
+const { entityDependecySort, primitiveTypes, defaultValues  } = require("../generators/api/_helpers");
 
 
 describe("Render templates", () => {
@@ -23,18 +21,12 @@ describe("Render templates", () => {
 
   });
 
-  test("ModelWriter", () => {
-    const efWriter = new ModelWriter(this.model, { namespace: "ReactSample.Models" });
-    const data = efWriter.getData();
-    console.log(data);
-    expect(data).not.toBe(null)
+  test("Model", () => {
+    ejs.renderFile(path.dirname(__dirname) + '/generators/api/model.ejs', { model: this.model, primitiveTypes, defaultValues, info: { namespace: "ReactSample" } }, (err, data) => { console.log(data); expect(err).toBe(null); });
   });
 
-  test("ApiModelWriter", () => {
-    const efWriter = new ApiModelWriter(this.model, { namespace: "ReactSample.ApiModels" });
-    const data = efWriter.getData();
-    console.log(data);
-    expect(data).not.toBe(null)
+  test("ApiModel", () => {
+    ejs.renderFile(path.dirname(__dirname) + '/generators/api/api-model.ejs', { model: this.model, primitiveTypes, defaultValues, info: { namespace: "ReactSample" } }, (err, data) => { console.log(data); expect(err).toBe(null); });
   });
 
 
