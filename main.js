@@ -153,8 +153,6 @@ async function generateEntity() {
 
     const namespace = getNamespace();
 
-    if (buttonId === 'ok') {
-
       await generateFile(__dirname + '/generators/api/controller.ejs', `\\Web\\Controllers\\${model.name}Controller.cs`, { model, info: { namespace }, _case: Case }, confirmWriteFileSync);
       await generateFile(__dirname + '/generators/api/model.ejs', `\\Web\\Models\\${model.name}.cs`, { model, info: { namespace: namespace + ".Models" }, primitiveTypes, defaultValues }, confirmWriteFileSync);
       await generateFile(__dirname + '/generators/api/test.ejs', `\\ApiTest\\${model.name}Test.cs`, { model, info: { namespace }, faker: faker }, confirmWriteFileSync);
@@ -168,7 +166,7 @@ async function generateEntity() {
         await generateFile(__dirname + '/generators/react/operation.ejs', `\\Web\\ClientApp\\src\\components\\Ui${model.name + operation.name}.jsx`, { operation, info: { name: model.name }, _case: Case, helper: reactHelper }, confirmWriteFileSync)
       }
 
-    }
+    
 
 
   }
