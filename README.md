@@ -21,6 +21,12 @@
 - Robus @UMLModel validation
 - Fast template development using Jest runner
 
+## Primitive types
+- Integer
+- Text
+- Decimal
+- DateTime
+- Bool
 
 ## Prerequisites
 
