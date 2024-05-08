@@ -16,19 +16,19 @@ function init() {
 
   app.commands.register(
     "react-core:generate-solution",
-    () => commandExecutor("generate-solution"),
+    () => commandExecutor(generatSolution),
     "Generate Project"
   );
 
   app.commands.register(
     "react-core:generate-db-context",
-    () => commandExecutor("generate-db-context"),
+    () => commandExecutor(generateDbContext),
     "Generate db-context"
   );
 
   app.commands.register(
     "react-core:generate-seeder",
-    () => commandExecutor("generate-seeder"),
+    () => commandExecutor(generateSeeder),
     "Generate Test seeder"
   );
 
@@ -36,33 +36,33 @@ function init() {
 
   app.commands.register(
     "react-core:generate-setup-proxy",
-    (arg) => commandExecutor("generate-setup-proxy",arg),
+    () => commandExecutor(generateSetupProxy),
     "Generate setup proxy"
   );
 
   
   app.commands.register(
     "react-core:generate-app-routes",
-    (arg) => commandExecutor("generate-app-routes", arg),
+    () => commandExecutor(generateAppRoutes),
     "Generate app routes"
   );
 
   app.commands.register(
     "react-core:generate-nav-menu",
-    (arg) => commandExecutor("generate-nav-menu", arg),
+    () => commandExecutor(generateNavMenu),
     "Generate nav menu"
   );
 
   app.commands.register(
     "react-core:generate-entity",
-    (arg) => commandExecutor("generate-entity", arg),
+    () => commandExecutor(generateEntity),
     "Generate Entity"
   );
 
 
   app.commands.register(
     "react-core:export-metadata",
-    (arg)=> commandExecutor("export-metadata", arg),
+    ()=> commandExecutor(exportMetadata),
     "Export metadata"
   );
 
@@ -70,18 +70,7 @@ function init() {
 }
 
 
-async function commandExecutor(name, arg) {
-  const tasksMap = new Map();
-  tasksMap.set("generate-solution", generatSolution);
-  tasksMap.set("generate-db-context", generateDbContext);
-  tasksMap.set("generate-seeder", generateSeeder);
-  tasksMap.set("generate-setup-proxy", generateSetupProxy);
-  tasksMap.set("generate-app-routes", generateAppRoutes);
-  tasksMap.set("generate-entity", generateEntity);
-  tasksMap.set("generate-nav-menu", generateNavMenu);
-  tasksMap.set("export-metadata", exportMetadata);
-  
-  const task = tasksMap.get(name);
+async function commandExecutor(task, arg) {
 
   try{
     validate();
@@ -221,8 +210,6 @@ async function generatSolution() {
   ['ApiTest\\UnitTest1.cs', 'Web\\WeatherForecast.cs', 'Web\\Controllers\\WeatherForecastController.cs', 'Web\\Program.cs'].forEach(x =>fs.unlinkSync( projectPath + '\\' + x));
   ['ApiTest\\Seeders', 'Web\\Models', 'Web\\ApiModels'].forEach(x => fs.mkdirSync(projectPath + '\\' + x));
 
-  
-
   await copyEjs(__dirname + '/generators/api/program.ejs', projectPath + `\\Web\\Program.cs`, { info: { namespace }}, fileWriter)
   await copyEjs(__dirname + '/generators/api/custom-web-app-factory.ejs', projectPath + `\\ApiTest\\CustomWebApplicationFactory.cs`, { info: { namespace } }, fileWriter)
   await copyEjs(__dirname + '/generators/api/iseeder.ejs', projectPath + `\\ApiTest\\ISeeder.cs`, { info: { namespace } }, fileWriter)
@@ -236,9 +223,8 @@ async function generatSolution() {
 async function generateSeeder() {
   const projectPath = getProjectPath();
   const namespace = getNamespace();
-  const fileWriter = confirmWriteFileSync
   const entities = app.repository.select("@UMLClass").filter(x => x.stereotype && x.stereotype.name === "Entity")
-  await copyEjs(__dirname + '/generators/api/seeder.ejs', projectPath + `\\ApiTest\\Seeders\\DefaultSeeder.cs`, { count: 10, entities, info: { namespace }, faker, entityDependecySort }, fileWriter)
+  await copyEjs(__dirname + '/generators/api/seeder.ejs', projectPath + `\\ApiTest\\Seeders\\DefaultSeeder.cs`, { count: 10, entities, info: { namespace }, faker, entityDependecySort }, confirmWriteFileSync)
   app.toast.info("Seeder generated");
 }
 
@@ -246,41 +232,34 @@ async function generateSeeder() {
 async function generateDbContext() {
   const namespace = getNamespace();
   const projectPath = getProjectPath();
-  const fileWriter = confirmWriteFileSync
-  await copyEjs(__dirname + '/generators/api/db-context.ejs', projectPath + `\\Web\\ApplicationDbContext.cs`, { info: { namespace }, entities: app.repository.select("@UMLClass").filter(x => x.stereotype && x.stereotype.name === "Entity") }, fileWriter)
+  await copyEjs(__dirname + '/generators/api/db-context.ejs', projectPath + `\\Web\\ApplicationDbContext.cs`, { info: { namespace }, entities: app.repository.select("@UMLClass").filter(x => x.stereotype && x.stereotype.name === "Entity") }, confirmWriteFileSync)
   app.toast.info("DbContext generated");
 }
 
 async function generateSetupProxy() {
   const projectPath = getProjectPath();
-  const fileWriter = confirmWriteFileSync
-  await copyEjs(__dirname + '/generators/react/setup-proxy.ejs', projectPath + `\\Web\\ClientApp\\src\\setupProxy.js`, { entities: app.repository.select("@UMLClass").filter(x => x.stereotype && x.stereotype.name === "Entity"), _case: Case  }, fileWriter)
+  await copyEjs(__dirname + '/generators/react/setup-proxy.ejs', projectPath + `\\Web\\ClientApp\\src\\setupProxy.js`, { entities: app.repository.select("@UMLClass").filter(x => x.stereotype && x.stereotype.name === "Entity"), _case: Case  }, confirmWriteFileSync)
   app.toast.info("setupProxy generated");
 }
 
 
 async function generateAppRoutes() {
   const projectPath = getProjectPath();
-  const fileWriter = confirmWriteFileSync
-  await copyEjs(__dirname + '/generators/react/app-routes.ejs', projectPath + `\\Web\\ClientApp\\src\\AppRoutes.js`, { entities: app.repository.select("@UMLClass").filter(x => x.stereotype && x.stereotype.name === "Entity"), _case: Case  }, fileWriter)
+  await copyEjs(__dirname + '/generators/react/app-routes.ejs', projectPath + `\\Web\\ClientApp\\src\\AppRoutes.js`, { entities: app.repository.select("@UMLClass").filter(x => x.stereotype && x.stereotype.name === "Entity"), _case: Case  }, confirmWriteFileSync)
   app.toast.info("AppRoutes generated");
 }
 
 
 async function generateNavMenu() {
   const projectPath = getProjectPath();
-  const fileWriter = confirmWriteFileSync
-  await copyEjs(__dirname + '/generators/react/nav-menu.ejs', projectPath + `\\Web\\ClientApp\\src\\components\\NavMenu.js`, { entities: app.repository.select("@UMLClass").filter(x => x.stereotype && x.stereotype.name === "Entity"), _case: Case  }, fileWriter)
+  await copyEjs(__dirname + '/generators/react/nav-menu.ejs', projectPath + `\\Web\\ClientApp\\src\\components\\NavMenu.js`, { entities: app.repository.select("@UMLClass").filter(x => x.stereotype && x.stereotype.name === "Entity"), _case: Case  }, confirmWriteFileSync)
   app.toast.info("NavMenu generated");
 }
 
 
 function exportMetadata(path) {
-
   var cls = app.repository.select("@UMLClass")
   const clss = _deepCopy(cls, 20, 0, ['_parent']);
-
-
   fs.writeFileSync(path, beautify(clss, null, 2, 100));
 }
 
