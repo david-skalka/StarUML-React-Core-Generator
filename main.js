@@ -62,7 +62,7 @@ function init() {
 
   app.commands.register(
     "react-core:export-metadata",
-    ()=> commandExecutor(exportMetadata),
+    (arg)=> commandExecutor(exportMetadata, arg),
     "Export metadata"
   );
 
