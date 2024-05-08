@@ -48,7 +48,6 @@
 
 ## Roadmap
 - Many to many relation
-- More primitive types support
 
 ## How to modify
 1. Copy `C:\Users\<user>\AppData\Roaming\StarUML\extensions\user\staruml-react-core-generator` to custom folder
