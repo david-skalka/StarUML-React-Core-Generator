@@ -1,0 +1,72 @@
+name: 'github-actions-release'
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  prepare-release:
+    runs-on: ubuntu-latest
+
+    outputs:
+      asset-name: ${{ steps.set-asset-properties.outputs.asset-name }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Cache node modules
+        id: cache-node-modules
+        uses: actions/cache@v3
+        env:
+          cache-name: node-modules
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'npm'
+      - id: set-package-properties
+        run: |
+          echo PKG_NAME=$(node -p -e "require('./package.json').name") >> $GITHUB_ENV
+          echo PKG_VERSION=$(node -p -e "require('./package.json').version") >> $GITHUB_ENV
+      - run: npm install -g mkdirp
+      - run: npm prune --production
+      - run: mkdirp ./dist --mode=0777
+      - run: mkdirp ./${{ env.PKG_NAME }} --mode=0777
+      - run: cp *.js package.json README.md LICENSE ./${{ env.PKG_NAME }}
+      - run: cp -r ./generators ./menus ./node_modules ./preferences ./${{ env.PKG_NAME }}
+      - run: zip -r ./dist/${{ env.PKG_NAME }}-${{ env.PKG_VERSION }}.zip ./${{ env.PKG_NAME }}
+      - run: ls -la
+      - run: ls -la dist/
+      - id: set-asset-properties
+        run: |
+          echo asset-path=$(echo ./dist/${{ env.PKG_NAME }}-${{ env.PKG_VERSION }}.zip) >> $GITHUB_OUTPUT
+          echo asset-name=$(echo ${{ env.PKG_NAME }}-${{ env.PKG_VERSION }}.zip) >> $GITHUB_OUTPUT
+      - name: Release-package as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ steps.set-asset-properties.outputs.asset-name }}
+          path: ${{ steps.set-asset-properties.outputs.asset-path }}
+
+  release:
+    needs: prepare-release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download release-package
+        id: download-release-asset
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ needs.prepare-release.outputs.asset-name }}
+      - name: Create Release
+        id: create-release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          draft: false
+          prerelease: false
+          fail_on_unmatched_files: true
+          generate_release_notes: true
+          files: ${{ steps.download-release-asset.outputs.download-path }}/${{ needs.prepare-release.outputs.asset-name }}
