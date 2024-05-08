@@ -138,15 +138,15 @@ function getNamespace() {
   return umlModel.tags.find(x => x.name === "Namespace").value;
 }
 
+function getEntities() {
+  return app.repository.select("@UMLClass").filter(x => x.stereotype && x.stereotype.name === "Entity");
+}
+
 
 async function generateEntity() {
 
-
-  var classes = app.repository.select("@UMLClass").filter(x => x.stereotype && x.stereotype.name === "Entity")
+  var classes = getEntities();
   const { buttonId, returnValue } = await app.elementListPickerDialog.showDialog("Select a set of Class", classes);
-
-  
-
   const model = returnValue;
   if (buttonId === "ok") {
 
@@ -215,7 +215,7 @@ async function generatSolution() {
 async function generateSeeder() {
   const projectPath = getProjectPath();
   const namespace = getNamespace();
-  const entities = app.repository.select("@UMLClass").filter(x => x.stereotype && x.stereotype.name === "Entity")
+  const entities = getEntities();
   await copyEjs(__dirname + '/generators/api/seeder.ejs', projectPath + `\\ApiTest\\Seeders\\DefaultSeeder.cs`, { count: 10, entities, info: { namespace }, faker, entityDependecySort }, confirmWriteFileSync)
   app.toast.info("Seeder generated");
 }
@@ -224,27 +224,27 @@ async function generateSeeder() {
 async function generateDbContext() {
   const namespace = getNamespace();
   const projectPath = getProjectPath();
-  await copyEjs(__dirname + '/generators/api/db-context.ejs', projectPath + `\\Web\\ApplicationDbContext.cs`, { info: { namespace }, entities: app.repository.select("@UMLClass").filter(x => x.stereotype && x.stereotype.name === "Entity") }, confirmWriteFileSync)
+  await copyEjs(__dirname + '/generators/api/db-context.ejs', projectPath + `\\Web\\ApplicationDbContext.cs`, { info: { namespace }, entities: getEntities() }, confirmWriteFileSync)
   app.toast.info("DbContext generated");
 }
 
 async function generateSetupProxy() {
   const projectPath = getProjectPath();
-  await copyEjs(__dirname + '/generators/react/setup-proxy.ejs', projectPath + `\\Web\\ClientApp\\src\\setupProxy.js`, { entities: app.repository.select("@UMLClass").filter(x => x.stereotype && x.stereotype.name === "Entity"), _case: Case  }, confirmWriteFileSync)
+  await copyEjs(__dirname + '/generators/react/setup-proxy.ejs', projectPath + `\\Web\\ClientApp\\src\\setupProxy.js`, { entities: getEntities(), _case: Case  }, confirmWriteFileSync)
   app.toast.info("setupProxy generated");
 }
 
 
 async function generateAppRoutes() {
   const projectPath = getProjectPath();
-  await copyEjs(__dirname + '/generators/react/app-routes.ejs', projectPath + `\\Web\\ClientApp\\src\\AppRoutes.js`, { entities: app.repository.select("@UMLClass").filter(x => x.stereotype && x.stereotype.name === "Entity"), _case: Case  }, confirmWriteFileSync)
+  await copyEjs(__dirname + '/generators/react/app-routes.ejs', projectPath + `\\Web\\ClientApp\\src\\AppRoutes.js`, { entities: getEntities(), _case: Case  }, confirmWriteFileSync)
   app.toast.info("AppRoutes generated");
 }
 
 
 async function generateNavMenu() {
   const projectPath = getProjectPath();
-  await copyEjs(__dirname + '/generators/react/nav-menu.ejs', projectPath + `\\Web\\ClientApp\\src\\components\\NavMenu.js`, { entities: app.repository.select("@UMLClass").filter(x => x.stereotype && x.stereotype.name === "Entity"), _case: Case  }, confirmWriteFileSync)
+  await copyEjs(__dirname + '/generators/react/nav-menu.ejs', projectPath + `\\Web\\ClientApp\\src\\components\\NavMenu.js`, { entities: getEntities(), _case: Case  }, confirmWriteFileSync)
   app.toast.info("NavMenu generated");
 }
 
