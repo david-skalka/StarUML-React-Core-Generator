@@ -148,6 +148,9 @@ async function generateEntity() {
 
   var classes = getEntities();
   const { buttonId, returnValue } = await app.elementListPickerDialog.showDialog("Select a set of Class", classes);
+  
+  if(returnValue === null) throw new Error("No class selected");
+
   const model = returnValue;
   if (buttonId === "ok") {
 
