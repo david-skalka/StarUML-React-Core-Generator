@@ -1,11 +1,10 @@
 const fs = require("fs");
 const ejs = require("ejs");
-const { faker, en } = require("@faker-js/faker");
+const { faker } = require("@faker-js/faker");
 const beautify = require("json-beautify");
 const { Case } = require('change-case-all');
 const reactHelper = require("./templates/react/_helpers");
 const { modelSchema, classesSchema } = require('./joi-schemas.js');
-const ChildProcess = require("child_process");
 const _deepCopy = require('./deep-copy.js');
 const { entityDependecySort, primitiveTypes, defaultValues } = require("./templates/api/_helpers");
 const path = require("path");
