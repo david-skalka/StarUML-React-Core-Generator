@@ -15,19 +15,19 @@ function init() {
 
   app.commands.register(
     "react-core:generate-solution",
-    () => commandExecutor(generatSolution),
+    () => executeCommand(solutionCommand),
     "Generate Project"
   );
 
   app.commands.register(
     "react-core:generate-db-context",
-    () => commandExecutor(generateDbContext),
+    () => executeCommand(dbContextCommand),
     "Generate db-context"
   );
 
   app.commands.register(
     "react-core:generate-seeder",
-    () => commandExecutor(generateSeeder),
+    () => executeCommand(seederCommand),
     "Generate Test seeder"
   );
 
@@ -35,33 +35,33 @@ function init() {
 
   app.commands.register(
     "react-core:generate-setup-proxy",
-    () => commandExecutor(generateSetupProxy),
+    () => executeCommand(setupProxyCommand),
     "Generate setup proxy"
   );
 
 
   app.commands.register(
     "react-core:generate-app-routes",
-    () => commandExecutor(generateAppRoutes),
+    () => executeCommand(appRoutesCommand),
     "Generate app routes"
   );
 
   app.commands.register(
     "react-core:generate-nav-menu",
-    () => commandExecutor(generateNavMenu),
+    () => executeCommand(navMenuCommand),
     "Generate nav menu"
   );
 
   app.commands.register(
     "react-core:generate-entity",
-    () => commandExecutor(generateEntity),
+    () => executeCommand(entitiesCommand),
     "Generate Entity"
   );
 
 
   app.commands.register(
     "react-core:export-metadata",
-    (arg) => commandExecutor(exportMetadata, arg),
+    (arg) => executeCommand(exportMetadataCommand, arg),
     "Export metadata"
   );
 
@@ -69,7 +69,7 @@ function init() {
 }
 
 
-async function commandExecutor(task, arg) {
+async function executeCommand(task, arg) {
 
   try {
     validate();
@@ -144,7 +144,7 @@ function getEntities() {
 }
 
 
-async function generateEntity() {
+ const entitiesCommand   = async() => {
 
   var classes = getEntities();
   const { buttonId, returnValue } = await app.elementListPickerDialog.showDialog("Select a set of Class", classes);
@@ -178,7 +178,7 @@ async function generateEntity() {
 }
 
 
-async function generatSolution() {
+const solutionCommand = async () => {
 
   const projectPath = getProjectPath();
   const namespace = getNamespace();
@@ -207,31 +207,31 @@ async function generatSolution() {
 
 
 
-async function generateSeeder() {
+const seederCommand = async ()  => {
   await generateFile(__dirname + '/templates/api/seeder.ejs', `\\ApiTest\\Seeders\\DefaultSeeder.cs`, { count: 10, entities: getEntities(), info: { namespace: getNamespace() }, faker, entityDependecySort }, confirmWriteFileSync)
 }
 
 
-async function generateDbContext() {
+const dbContextCommand = async  () => {
   await generateFile(__dirname + '/templates/api/db-context.ejs', `\\Web\\ApplicationDbContext.cs`, { info: { namespace: getNamespace() }, entities: getEntities() }, confirmWriteFileSync)
 }
 
-async function generateSetupProxy() {
+const setupProxyCommand = async () => {
   await generateFile(__dirname + '/templates/react/setup-proxy.ejs', `\\Web\\ClientApp\\src\\setupProxy.js`, { entities: getEntities(), _case: Case }, confirmWriteFileSync)
 }
 
 
-async function generateAppRoutes() {
+const appRoutesCommand = async ()  =>{
   await generateFile(__dirname + '/templates/react/app-routes.ejs', `\\Web\\ClientApp\\src\\AppRoutes.js`, { entities: getEntities(), _case: Case }, confirmWriteFileSync)
 }
 
 
-async function generateNavMenu() {
+const  navMenuCommand = async () => {
   await generateFile(__dirname + '/templates/react/nav-menu.ejs', `\\Web\\ClientApp\\src\\components\\NavMenu.js`, { entities: getEntities(), _case: Case }, confirmWriteFileSync)
 }
 
 
-function exportMetadata(path) {
+const exportMetadataCommand = (path) => {
   var cls = app.repository.select("@UMLClass")
   const clss = _deepCopy(cls, 20, 0, ['_parent']);
   fs.writeFileSync(path, beautify(clss, null, 2, 100));
