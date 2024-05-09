@@ -9,6 +9,8 @@ const ChildProcess = require("child_process");
 const _deepCopy = require('./deep-copy.js');
 const { entityDependecySort, primitiveTypes, defaultValues } = require("./templates/api/_helpers");
 const path = require("path");
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
 
 function init() {
 
@@ -84,10 +86,11 @@ async function executeCommand(task, arg) {
 
 
 async function generateFile(src, dest, varBag, writer) {
+  app.toast.info("Generating " + dest);
   const rendered = await ejs.renderFile(src, varBag);
   const projectPath = getProjectPath();
   writer(path.join(projectPath, dest), rendered);
-  app.toast.info("Generated " + dest);
+  
 }
 
 
@@ -100,6 +103,11 @@ function confirmWriteFileSync(path, data) {
     }
   }
   fs.writeFileSync(path, data);
+}
+
+async function execShell(cmd, options) {
+  app.toast.info("Executing " + cmd);
+  await exec(cmd, options);
 }
 
 function getProjectPath() {
@@ -184,16 +192,16 @@ const solutionCommand = async () => {
   const namespace = getNamespace();
   const fileWriter = confirmWriteFileSync
 
-  ChildProcess.execSync('dotnet new sln -n ' + namespace + ' -o "' + projectPath + '"',);
-  ChildProcess.execSync('dotnet new react -f net6.0 -n ' + namespace + ' -o "' + projectPath + '\\Web"',);
-  ChildProcess.execSync('npm i react-bootstrap', { cwd: projectPath + '\\Web\\ClientApp' });
-  ChildProcess.execSync('npm i react-datepicker', { cwd: projectPath + '\\Web\\ClientApp' });
-  ChildProcess.execSync('dotnet add package Microsoft.EntityFrameworkCore --version 6.0.27', { cwd: projectPath + '\\Web' });
-  ChildProcess.execSync('dotnet add package Microsoft.EntityFrameworkCore.Sqlite --version 6.0.27', { cwd: projectPath + '\\Web' });
-  ChildProcess.execSync('dotnet new nunit -f net6.0 -n ' + namespace + 'ApiTest -o "' + projectPath + '\\ApiTest"',);
-  ChildProcess.execSync('dotnet add package Microsoft.AspNetCore.Mvc.Testing --version 6.0.27', { cwd: projectPath + '\\ApiTest' });
-  ChildProcess.execSync('dotnet add reference ../Web', { cwd: projectPath + '\\ApiTest' });
-  ChildProcess.execSync('dotnet sln ' + namespace + '.sln add Web ApiTest', { cwd: projectPath });
+  await execShell('dotnet new sln -n ' + namespace + ' -o "' + projectPath + '"',);
+  await execShell('dotnet new react -f net6.0 -n ' + namespace + ' -o "' + projectPath + '\\Web"',);
+  await execShell('npm i react-bootstrap', { cwd: projectPath + '\\Web\\ClientApp' });
+  await execShell('npm i react-datepicker', { cwd: projectPath + '\\Web\\ClientApp' });
+  await execShell('dotnet add package Microsoft.EntityFrameworkCore --version 6.0.27', { cwd: projectPath + '\\Web' });
+  await execShell('dotnet add package Microsoft.EntityFrameworkCore.Sqlite --version 6.0.27', { cwd: projectPath + '\\Web' });
+  await execShell('dotnet new nunit -f net6.0 -n ' + namespace + 'ApiTest -o "' + projectPath + '\\ApiTest"',);
+  await execShell('dotnet add package Microsoft.AspNetCore.Mvc.Testing --version 6.0.27', { cwd: projectPath + '\\ApiTest' });
+  await execShell('dotnet add reference ../Web', { cwd: projectPath + '\\ApiTest' });
+  await execShell('dotnet sln ' + namespace + '.sln add Web ApiTest', { cwd: projectPath });
 
   ['ApiTest\\UnitTest1.cs', 'Web\\WeatherForecast.cs', 'Web\\Controllers\\WeatherForecastController.cs', 'Web\\Program.cs'].forEach(x => fs.unlinkSync(projectPath + '\\' + x));
   ['ApiTest\\Seeders', 'Web\\Models', 'Web\\ApiModels'].forEach(x => fs.mkdirSync(projectPath + '\\' + x));
