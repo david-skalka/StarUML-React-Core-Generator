@@ -16,7 +16,7 @@ function init() {
 
   app.commands.register(
     "react-core:generate-solution",
-    () => executeCommand(solutionCommand),
+     () => executeCommand(solutionCommand),
     "Generate Project"
   );
 
@@ -87,7 +87,7 @@ async function executeCommand(task, arg) {
 async function generateTemplete(src, dest, varBag, writer) {
   app.toast.info("Generating " + dest);
   const rendered = await ejs.renderFile(src, varBag);
-  const projectPath = getProjectPath();
+  const projectPath = getSolutionPath();
   writer(path.join(projectPath, dest), rendered);
   
 }
@@ -109,8 +109,8 @@ async function execShell(cmd, options) {
   await exec(cmd, options);
 }
 
-function getProjectPath() {
-  const tmp = app.preferences.get('react-core.project-path');
+function getSolutionPath() {
+  const tmp = app.preferences.get('react-core.solution-path');
   return tmp.endsWith('\\') ? tmp.slice(0, -1) : tmp;
 }
 
@@ -187,7 +187,7 @@ function getEntities() {
 
 const solutionCommand = async () => {
 
-  const projectPath = getProjectPath();
+  const projectPath = getSolutionPath();
   const namespace = getNamespace();
   const fileWriter = confirmWriteFileSync
 
