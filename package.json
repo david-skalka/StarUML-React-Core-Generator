@@ -1,9 +1,9 @@
 {
   "name": "david-skalka.staruml-react-core-generator",
   "title": "StarUML React Core Generator",
-  "description": "An extension for StarUML to generate an entire test driven development ready .NET Core React CRUD application from a UML model. Inspired by JHipster and Yellicode bookstore tutorial. Simple and modificable for your own technology.",
+  "description": "An extension for StarUML to generate an fullstack test driven development ready .NET Core React CRUD application from a UML model. Inspired by JHipster and Yellicode bookstore tutorial. Minimalistic intended to modification for your own model driven generator technology.",
   "homepage": "https://github.com/david-skalka/StarUML-React-Core-Generator",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "keywords": [
     "React",
     "Source Code Generation",

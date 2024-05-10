@@ -7,7 +7,7 @@
   </a>
 </p>
 
-> An extension for StarUML to generate an entire test driven development ready .NET Core React CRUD application from a UML model. Inspired by JHipster and Yellicode bookstore tutorial. Simple and modificable for your own technology.
+> An extension for StarUML to generate an fullstack test driven development ready .NET Core React CRUD application from a UML model. Inspired by JHipster and Yellicode bookstore tutorial. Minimalistic intended to modification for your own model driven generator technology.
 
 ### 🏠 [Homepage](https://github.com/david-skalka/StarUML-React-Core-Generator)
 
