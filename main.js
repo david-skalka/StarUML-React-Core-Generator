@@ -16,7 +16,7 @@ function init() {
 
   app.commands.register(
     "react-core:generate-solution",
-    () => executeCommand(solutionCommand),
+     () => executeCommand(solutionCommand),
     "Generate Project"
   );
 
@@ -84,10 +84,10 @@ async function executeCommand(task, arg) {
 
 
 
-async function generateFile(src, dest, varBag, writer) {
+async function generateTemplete(src, dest, varBag, writer) {
   app.toast.info("Generating " + dest);
   const rendered = await ejs.renderFile(src, varBag);
-  const projectPath = getProjectPath();
+  const projectPath = getSolutionPath();
   writer(path.join(projectPath, dest), rendered);
   
 }
@@ -109,8 +109,8 @@ async function execShell(cmd, options) {
   await exec(cmd, options);
 }
 
-function getProjectPath() {
-  const tmp = app.preferences.get('react-core.project-path');
+function getSolutionPath() {
+  const tmp = app.preferences.get('react-core.solution-path');
   return tmp.endsWith('\\') ? tmp.slice(0, -1) : tmp;
 }
 
@@ -163,17 +163,17 @@ function getEntities() {
 
     const namespace = getNamespace();
 
-      await generateFile(__dirname + '/templates/api/controller.ejs', `\\Web\\Controllers\\${model.name}Controller.cs`, { model, info: { namespace }, _case: Case }, confirmWriteFileSync);
-      await generateFile(__dirname + '/templates/api/model.ejs', `\\Web\\Models\\${model.name}.cs`, { model, info: { namespace: namespace + ".Models" }, primitiveTypes, defaultValues }, confirmWriteFileSync);
-      await generateFile(__dirname + '/templates/api/test.ejs', `\\ApiTest\\${model.name}Test.cs`, { model, info: { namespace }, faker: faker }, confirmWriteFileSync);
-      await generateFile(__dirname + '/templates/react/ui.ejs', `\\Web\\ClientApp\\src\\components\\Ui${model.name}.jsx`, { model, info: { namespace }, _case: Case }, confirmWriteFileSync)
-      await generateFile(__dirname + '/templates/react/modal.ejs', `\\Web\\ClientApp\\src\\components\\Modal${model.name}.jsx`, { model, info: { namespace }, _case: Case, helper: reactHelper }, confirmWriteFileSync)
+      await generateTemplete(__dirname + '/templates/api/controller.ejs', `\\Web\\Controllers\\${model.name}Controller.cs`, { model, info: { namespace }, _case: Case }, confirmWriteFileSync);
+      await generateTemplete(__dirname + '/templates/api/model.ejs', `\\Web\\Models\\${model.name}.cs`, { model, info: { namespace: namespace + ".Models" }, primitiveTypes, defaultValues }, confirmWriteFileSync);
+      await generateTemplete(__dirname + '/templates/api/test.ejs', `\\ApiTest\\${model.name}Test.cs`, { model, info: { namespace }, faker: faker }, confirmWriteFileSync);
+      await generateTemplete(__dirname + '/templates/react/ui.ejs', `\\Web\\ClientApp\\src\\components\\Ui${model.name}.jsx`, { model, info: { namespace }, _case: Case }, confirmWriteFileSync)
+      await generateTemplete(__dirname + '/templates/react/modal.ejs', `\\Web\\ClientApp\\src\\components\\Modal${model.name}.jsx`, { model, info: { namespace }, _case: Case, helper: reactHelper }, confirmWriteFileSync)
 
 
       for (operation of model.operations) {
-        await generateFile(__dirname + '/templates/api/api-model.ejs', `\\Web\\ApiModels\\${operation.parameters.find(parameter => parameter.direction !== 'return').type.name}.cs`, { info: { namespace: namespace + ".ApiModels" }, model: operation.parameters.find(parameter => parameter.direction !== 'return').type, primitiveTypes, defaultValues }, confirmWriteFileSync)
-        await generateFile(__dirname + '/templates/api/api-model.ejs', `\\Web\\ApiModels\\${operation.parameters.find(parameter => parameter.direction === 'return').type.name}.cs`, { info: { namespace: namespace + ".ApiModels" }, model: operation.parameters.find(parameter => parameter.direction === 'return').type, primitiveTypes, defaultValues }, confirmWriteFileSync)
-        await generateFile(__dirname + '/templates/react/operation.ejs', `\\Web\\ClientApp\\src\\components\\Ui${model.name + operation.name}.jsx`, { operation, info: { name: model.name }, _case: Case, helper: reactHelper }, confirmWriteFileSync)
+        await generateTemplete(__dirname + '/templates/api/api-model.ejs', `\\Web\\ApiModels\\${operation.parameters.find(parameter => parameter.direction !== 'return').type.name}.cs`, { info: { namespace: namespace + ".ApiModels" }, model: operation.parameters.find(parameter => parameter.direction !== 'return').type, primitiveTypes, defaultValues }, confirmWriteFileSync)
+        await generateTemplete(__dirname + '/templates/api/api-model.ejs', `\\Web\\ApiModels\\${operation.parameters.find(parameter => parameter.direction === 'return').type.name}.cs`, { info: { namespace: namespace + ".ApiModels" }, model: operation.parameters.find(parameter => parameter.direction === 'return').type, primitiveTypes, defaultValues }, confirmWriteFileSync)
+        await generateTemplete(__dirname + '/templates/react/operation.ejs', `\\Web\\ClientApp\\src\\components\\Ui${model.name + operation.name}.jsx`, { operation, info: { name: model.name }, _case: Case, helper: reactHelper }, confirmWriteFileSync)
       }
 
     
@@ -187,7 +187,7 @@ function getEntities() {
 
 const solutionCommand = async () => {
 
-  const projectPath = getProjectPath();
+  const projectPath = getSolutionPath();
   const namespace = getNamespace();
   const fileWriter = confirmWriteFileSync
 
@@ -205,9 +205,9 @@ const solutionCommand = async () => {
   ['ApiTest\\UnitTest1.cs', 'Web\\WeatherForecast.cs', 'Web\\Controllers\\WeatherForecastController.cs', 'Web\\Program.cs'].forEach(x => fs.unlinkSync(projectPath + '\\' + x));
   ['ApiTest\\Seeders', 'Web\\Models', 'Web\\ApiModels'].forEach(x => fs.mkdirSync(projectPath + '\\' + x));
 
-  await generateFile(__dirname + '/templates/api/program.ejs', `\\Web\\Program.cs`, { info: { namespace } }, fileWriter)
-  await generateFile(__dirname + '/templates/api/custom-web-app-factory.ejs', `\\ApiTest\\CustomWebApplicationFactory.cs`, { info: { namespace } }, fileWriter)
-  await generateFile(__dirname + '/templates/api/iseeder.ejs', `\\ApiTest\\ISeeder.cs`, { info: { namespace } }, fileWriter)
+  await generateTemplete(__dirname + '/templates/api/program.ejs', `\\Web\\Program.cs`, { info: { namespace } }, fileWriter)
+  await generateTemplete(__dirname + '/templates/api/custom-web-app-factory.ejs', `\\ApiTest\\CustomWebApplicationFactory.cs`, { info: { namespace } }, fileWriter)
+  await generateTemplete(__dirname + '/templates/api/iseeder.ejs', `\\ApiTest\\ISeeder.cs`, { info: { namespace } }, fileWriter)
 
 
 }
@@ -215,26 +215,26 @@ const solutionCommand = async () => {
 
 
 const seederCommand = async ()  => {
-  await generateFile(__dirname + '/templates/api/seeder.ejs', `\\ApiTest\\Seeders\\DefaultSeeder.cs`, { count: 10, entities: getEntities(), info: { namespace: getNamespace() }, faker, entityDependecySort }, confirmWriteFileSync)
+  await generateTemplete(__dirname + '/templates/api/seeder.ejs', `\\ApiTest\\Seeders\\DefaultSeeder.cs`, { count: 10, entities: getEntities(), info: { namespace: getNamespace() }, faker, entityDependecySort }, confirmWriteFileSync)
 }
 
 
 const dbContextCommand = async  () => {
-  await generateFile(__dirname + '/templates/api/db-context.ejs', `\\Web\\ApplicationDbContext.cs`, { info: { namespace: getNamespace() }, entities: getEntities() }, confirmWriteFileSync)
+  await generateTemplete(__dirname + '/templates/api/db-context.ejs', `\\Web\\ApplicationDbContext.cs`, { info: { namespace: getNamespace() }, entities: getEntities() }, confirmWriteFileSync)
 }
 
 const setupProxyCommand = async () => {
-  await generateFile(__dirname + '/templates/react/setup-proxy.ejs', `\\Web\\ClientApp\\src\\setupProxy.js`, { entities: getEntities(), _case: Case }, confirmWriteFileSync)
+  await generateTemplete(__dirname + '/templates/react/setup-proxy.ejs', `\\Web\\ClientApp\\src\\setupProxy.js`, { entities: getEntities(), _case: Case }, confirmWriteFileSync)
 }
 
 
 const appRoutesCommand = async ()  =>{
-  await generateFile(__dirname + '/templates/react/app-routes.ejs', `\\Web\\ClientApp\\src\\AppRoutes.js`, { entities: getEntities(), _case: Case }, confirmWriteFileSync)
+  await generateTemplete(__dirname + '/templates/react/app-routes.ejs', `\\Web\\ClientApp\\src\\AppRoutes.js`, { entities: getEntities(), _case: Case }, confirmWriteFileSync)
 }
 
 
 const  navMenuCommand = async () => {
-  await generateFile(__dirname + '/templates/react/nav-menu.ejs', `\\Web\\ClientApp\\src\\components\\NavMenu.js`, { entities: getEntities(), _case: Case }, confirmWriteFileSync)
+  await generateTemplete(__dirname + '/templates/react/nav-menu.ejs', `\\Web\\ClientApp\\src\\components\\NavMenu.js`, { entities: getEntities(), _case: Case }, confirmWriteFileSync)
 }
 
 
