@@ -35,7 +35,7 @@ jobs:
       - run: mkdirp ./dist --mode=0777
       - run: mkdirp ./${{ env.PKG_NAME }} --mode=0777
       - run: cp *.js package.json README.md LICENSE ./${{ env.PKG_NAME }}
-      - run: cp -r ./generators ./menus ./node_modules ./preferences ./${{ env.PKG_NAME }}
+      - run: cp -r ./templates ./menus ./node_modules ./preferences ./${{ env.PKG_NAME }}
       - run: zip -r ./dist/${{ env.PKG_NAME }}-${{ env.PKG_VERSION }}.zip ./${{ env.PKG_NAME }}
       - run: ls -la
       - run: ls -la dist/
