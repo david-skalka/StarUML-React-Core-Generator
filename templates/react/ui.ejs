@@ -1,6 +1,15 @@
 import React, { Component } from 'react';
 import { Madal<%= model.name %> } from "./Modal<%= model.name %>";
 <% pluralName = model.tags.find(x => x.name === "Plural").value %>
+<% function getValuePrinter(property, type) {
+  switch (type) {
+    case 'Bool':
+      return `${property} ? 'true' : 'false'`;
+    default:
+      return property;
+  }
+
+} -%>
 export class Ui<%= model.name %> extends Component {
   static displayName = Ui<%= model.name %>.name;
 
@@ -48,7 +57,7 @@ export class Ui<%= model.name %> extends Component {
           {<%= _case.camel(pluralName) %>.map(<%= _case.camel(model.name) %> =>
             <tr key={<%= model.name.toLowerCase() %>.id}>
 <% model.attributes.forEach(attr=> { %>
-              <td>{<%= _case.camel(model.name) %>.<%= attr.type.stereotype.name==='Primitive' ? _case.camel(attr.name) : _case.camel(attr.name+ "Id")  %>}</td>
+              <td>{<%= _case.camel(model.name) %>.<%- attr.type.stereotype.name==='Primitive' ? getValuePrinter(_case.camel(attr.name), attr.type.name) : _case.camel(attr.name+ "Id")  %>}</td>
 <% }) %>
               <td>
                 <button class="btn btn-secondary m-1" onClick={ _ => this.handleOpenModal(<%= _case.camel(model.name) %>.id)} type="button">Editovat</button>

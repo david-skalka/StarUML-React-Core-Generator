@@ -20,6 +20,9 @@
 - Robus @UMLModel validation
 - Fast template development using Jest runner
 
+## Screencast
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/wPTYLHBJA1Q/0.jpg)](https://www.youtube.com/watch?v=wPTYLHBJA1Q)
+
 ## Primitive types
 - Integer
 - Text

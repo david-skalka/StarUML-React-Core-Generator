@@ -12,7 +12,7 @@ describe("Render templates", () => {
   beforeEach(() => {
     this.diagram = JSON.parse(fs.readFileSync(`test/data/sample.json`));
 
-    this.model = this.diagram.find(x => x.name === "Comment");
+    this.model = this.diagram.find(x => x.name === "Product");
   });
 
 

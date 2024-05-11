@@ -209,6 +209,7 @@ const solutionCommand = async () => {
   await generateTemplete(__dirname + '/templates/api/custom-web-app-factory.ejs', `\\ApiTest\\CustomWebApplicationFactory.cs`, { info: { namespace } }, fileWriter)
   await generateTemplete(__dirname + '/templates/api/iseeder.ejs', `\\ApiTest\\ISeeder.cs`, { info: { namespace } }, fileWriter)
 
+  app.toast.info("Project generated successfully");
 
 }
 
