@@ -39,9 +39,9 @@
 ## Install
 1- Install **StarUML**,  [download page](http://staruml.io/download).
 
-2- Download or clone this [repo](https://github.com/david-skalka/StarUML-React-Core-Generator).
+2- Download last release build
 
-3- Copy repo files to StarUML extension user folder.
+3- Unzip to StarUML extension user folder.
 
 - Windows: `C:\Users\<user>\AppData\Roaming\StarUML\extensions\user\staruml-react-core-generator`
 
