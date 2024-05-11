@@ -138,6 +138,10 @@ function validate() {
     throw new Error("@UMLClass validation errors: " + validationResultCls.error.details.map(x => x.message).join('\n'));
   }
 
+  if(!fs.existsSync(getSolutionPath() )) {
+    throw new Error("Solution path does not exist");
+  }
+
 }
 
 function getNamespace() {
