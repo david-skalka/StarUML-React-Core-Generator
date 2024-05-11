@@ -1,7 +1,6 @@
 <h1 align="center">Welcome to StarUML React Core Generator 👋</h1>
 <p>
-  <img alt="Version" src="https://img.shields.io/badge/version-0.0.1-blue.svg?cacheSeconds=2592000" />
-  <img src="https://img.shields.io/badge/staruml-%3E%3D6.0.0-blue.svg" />
+    <img src="https://img.shields.io/badge/staruml-%3E%3D6.0.0-blue.svg" />
   <a href="#" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
   </a>
