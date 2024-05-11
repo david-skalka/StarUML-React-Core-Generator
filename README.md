@@ -47,8 +47,8 @@
 
 ## Usage
 1. Open `test\data\sample.mdj`
-2. Open (`File > Preference > React .NET Core`) and fill Project path
-3. Click on the menu (Tools > React .NET Core ) and perform all the steps to generate the entire application
+2. Open (`File > Preference > React Core`) and fill Project path
+3. Click on the menu (Tools > React Core ) and perform all the steps to generate the entire application
 4. Run generated solution in Visual studio
 
 ## Example
