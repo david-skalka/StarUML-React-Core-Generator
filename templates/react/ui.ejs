@@ -60,8 +60,8 @@ export class Ui<%= model.name %> extends Component {
               <td>{<%= _case.camel(model.name) %>.<%- attr.type.stereotype.name==='Primitive' ? getValuePrinter(_case.camel(attr.name), attr.type.name) : _case.camel(attr.name+ "Id")  %>}</td>
 <% }) %>
               <td>
-                <button class="btn btn-secondary m-1" onClick={ _ => this.handleOpenModal(<%= _case.camel(model.name) %>.id)} type="button">Editovat</button>
-                <button class="btn btn-secondary m-1" onClick={ _ => this.handleDelete(<%= _case.camel(model.name) %>.id)} type="button">Smazat</button>
+                <button className="btn btn-secondary m-1" onClick={ _ => this.handleOpenModal(<%= _case.camel(model.name) %>.id)} type="button">Editovat</button>
+                <button className="btn btn-secondary m-1" onClick={ _ => this.handleDelete(<%= _case.camel(model.name) %>.id)} type="button">Smazat</button>
               </td>
             </tr>
           )}
@@ -79,7 +79,7 @@ export class Ui<%= model.name %> extends Component {
     return (
       <div>
         <h1 id="tabelLabel" ><%= pluralName %></h1>
-        <button class="btn btn-secondary" onClick={ _=>this.handleOpenModal(0)} type="button">Přidat</button>
+        <button className="btn btn-secondary" onClick={ _=>this.handleOpenModal(0)} type="button">Přidat</button>
         <Madal<%= model.name %> data={this.state.modalData} requestCloseHandler={this.handleCloseModal} />
         {contents}
       </div>
