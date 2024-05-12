@@ -95,18 +95,6 @@
             "number": 0,
             "options": "",
             "hidden": false
-          },
-          {
-            "_id": "AAAAAAGOX/KNxjZJBDk=",
-            "name": "Required",
-            "ownedElements": [],
-            "kind": "boolean",
-            "value": "",
-            "reference": null,
-            "checked": true,
-            "number": 0,
-            "options": "",
-            "hidden": false
           }
         ],
         "stereotype": {
@@ -267,18 +255,6 @@
             "value": "Name",
             "reference": null,
             "checked": false,
-            "number": 0,
-            "options": "",
-            "hidden": false
-          },
-          {
-            "_id": "AAAAAAGOX/PhfpTPw3c=",
-            "name": "Required",
-            "ownedElements": [],
-            "kind": "boolean",
-            "value": "",
-            "reference": null,
-            "checked": true,
             "number": 0,
             "options": "",
             "hidden": false
@@ -445,18 +421,6 @@
             "number": 0,
             "options": "",
             "hidden": false
-          },
-          {
-            "_id": "AAAAAAGOYB2ZXkVim6U=",
-            "name": "Required",
-            "ownedElements": [],
-            "kind": "boolean",
-            "value": "",
-            "reference": null,
-            "checked": false,
-            "number": 0,
-            "options": "",
-            "hidden": false
           }
         ],
         "stereotype": {
@@ -594,7 +558,7 @@
           "isLeaf": false,
           "isActive": false
         },
-        "multiplicity": "",
+        "multiplicity": "0..1",
         "isReadOnly": false,
         "isOrdered": false,
         "isUnique": false,
@@ -617,18 +581,6 @@
             "value": "Price",
             "reference": null,
             "checked": false,
-            "number": 0,
-            "options": "",
-            "hidden": false
-          },
-          {
-            "_id": "AAAAAAGPUpVCTkL/Joo=",
-            "name": "Required",
-            "ownedElements": [],
-            "kind": "boolean",
-            "value": "",
-            "reference": null,
-            "checked": true,
             "number": 0,
             "options": "",
             "hidden": false
@@ -792,18 +744,6 @@
             "value": "V.I.P.",
             "reference": null,
             "checked": false,
-            "number": 0,
-            "options": "",
-            "hidden": false
-          },
-          {
-            "_id": "AAAAAAGPUpZqzUMOneg=",
-            "name": "Required",
-            "ownedElements": [],
-            "kind": "boolean",
-            "value": "",
-            "reference": null,
-            "checked": true,
             "number": 0,
             "options": "",
             "hidden": false
@@ -1058,18 +998,6 @@
             "number": 0,
             "options": "",
             "hidden": false
-          },
-          {
-            "_id": "AAAAAAGOYBq2vEVBegE=",
-            "name": "Required",
-            "ownedElements": [],
-            "kind": "boolean",
-            "value": "",
-            "reference": null,
-            "checked": true,
-            "number": 0,
-            "options": "",
-            "hidden": false
           }
         ],
         "stereotype": {
@@ -1230,18 +1158,6 @@
             "value": "Title",
             "reference": null,
             "checked": false,
-            "number": 0,
-            "options": "",
-            "hidden": false
-          },
-          {
-            "_id": "AAAAAAGOYBypVUVZOcE=",
-            "name": "Required",
-            "ownedElements": [],
-            "kind": "boolean",
-            "value": "",
-            "reference": null,
-            "checked": true,
             "number": 0,
             "options": "",
             "hidden": false
@@ -1408,18 +1324,6 @@
             "number": 0,
             "options": "",
             "hidden": false
-          },
-          {
-            "_id": "AAAAAAGOYB0/dkVf2pM=",
-            "name": "Required",
-            "ownedElements": [],
-            "kind": "boolean",
-            "value": "",
-            "reference": null,
-            "checked": false,
-            "number": 0,
-            "options": "",
-            "hidden": false
           }
         ],
         "stereotype": {
@@ -1580,18 +1484,6 @@
             "value": "Product",
             "reference": null,
             "checked": false,
-            "number": 0,
-            "options": "",
-            "hidden": false
-          },
-          {
-            "_id": "AAAAAAGOYB5W5kVxKiY=",
-            "name": "Required",
-            "ownedElements": [],
-            "kind": "boolean",
-            "value": "",
-            "reference": null,
-            "checked": true,
             "number": 0,
             "options": "",
             "hidden": false
@@ -1777,18 +1669,6 @@
                   "number": 0,
                   "options": "",
                   "hidden": false
-                },
-                {
-                  "_id": "AAAAAAGOX/KNxjZJBDk=",
-                  "name": "Required",
-                  "ownedElements": [],
-                  "kind": "boolean",
-                  "value": "",
-                  "reference": null,
-                  "checked": true,
-                  "number": 0,
-                  "options": "",
-                  "hidden": false
                 }
               ],
               "stereotype": {
@@ -1949,18 +1829,6 @@
                   "value": "Name",
                   "reference": null,
                   "checked": false,
-                  "number": 0,
-                  "options": "",
-                  "hidden": false
-                },
-                {
-                  "_id": "AAAAAAGOX/PhfpTPw3c=",
-                  "name": "Required",
-                  "ownedElements": [],
-                  "kind": "boolean",
-                  "value": "",
-                  "reference": null,
-                  "checked": true,
                   "number": 0,
                   "options": "",
                   "hidden": false
@@ -2127,18 +1995,6 @@
                   "number": 0,
                   "options": "",
                   "hidden": false
-                },
-                {
-                  "_id": "AAAAAAGOYB2ZXkVim6U=",
-                  "name": "Required",
-                  "ownedElements": [],
-                  "kind": "boolean",
-                  "value": "",
-                  "reference": null,
-                  "checked": false,
-                  "number": 0,
-                  "options": "",
-                  "hidden": false
                 }
               ],
               "stereotype": {
@@ -2276,7 +2132,7 @@
                 "isLeaf": false,
                 "isActive": false
               },
-              "multiplicity": "",
+              "multiplicity": "0..1",
               "isReadOnly": false,
               "isOrdered": false,
               "isUnique": false,
@@ -2299,18 +2155,6 @@
                   "value": "Price",
                   "reference": null,
                   "checked": false,
-                  "number": 0,
-                  "options": "",
-                  "hidden": false
-                },
-                {
-                  "_id": "AAAAAAGPUpVCTkL/Joo=",
-                  "name": "Required",
-                  "ownedElements": [],
-                  "kind": "boolean",
-                  "value": "",
-                  "reference": null,
-                  "checked": true,
                   "number": 0,
                   "options": "",
                   "hidden": false
@@ -2474,18 +2318,6 @@
                   "value": "V.I.P.",
                   "reference": null,
                   "checked": false,
-                  "number": 0,
-                  "options": "",
-                  "hidden": false
-                },
-                {
-                  "_id": "AAAAAAGPUpZqzUMOneg=",
-                  "name": "Required",
-                  "ownedElements": [],
-                  "kind": "boolean",
-                  "value": "",
-                  "reference": null,
-                  "checked": true,
                   "number": 0,
                   "options": "",
                   "hidden": false
@@ -2667,18 +2499,6 @@
             "value": "Created",
             "reference": null,
             "checked": false,
-            "number": 0,
-            "options": "",
-            "hidden": false
-          },
-          {
-            "_id": "AAAAAAGPUpdehUMdCI4=",
-            "name": "Required",
-            "ownedElements": [],
-            "kind": "boolean",
-            "value": "",
-            "reference": null,
-            "checked": true,
             "number": 0,
             "options": "",
             "hidden": false
@@ -2951,18 +2771,6 @@
                       "number": 0,
                       "options": "",
                       "hidden": false
-                    },
-                    {
-                      "_id": "AAAAAAGOafY7vaEF2LE=",
-                      "name": "Required",
-                      "ownedElements": [],
-                      "kind": "boolean",
-                      "value": "",
-                      "reference": null,
-                      "checked": true,
-                      "number": 0,
-                      "options": "",
-                      "hidden": false
                     }
                   ],
                   "stereotype": {
@@ -3123,18 +2931,6 @@
                       "value": "Product",
                       "reference": null,
                       "checked": false,
-                      "number": 0,
-                      "options": "",
-                      "hidden": false
-                    },
-                    {
-                      "_id": "AAAAAAGOafbBNKEL06o=",
-                      "name": "Required",
-                      "ownedElements": [],
-                      "kind": "boolean",
-                      "value": "",
-                      "reference": null,
-                      "checked": true,
                       "number": 0,
                       "options": "",
                       "hidden": false
@@ -3320,18 +3116,6 @@
                             "number": 0,
                             "options": "",
                             "hidden": false
-                          },
-                          {
-                            "_id": "AAAAAAGOX/KNxjZJBDk=",
-                            "name": "Required",
-                            "ownedElements": [],
-                            "kind": "boolean",
-                            "value": "",
-                            "reference": null,
-                            "checked": true,
-                            "number": 0,
-                            "options": "",
-                            "hidden": false
                           }
                         ],
                         "stereotype": {
@@ -3492,18 +3276,6 @@
                             "value": "Name",
                             "reference": null,
                             "checked": false,
-                            "number": 0,
-                            "options": "",
-                            "hidden": false
-                          },
-                          {
-                            "_id": "AAAAAAGOX/PhfpTPw3c=",
-                            "name": "Required",
-                            "ownedElements": [],
-                            "kind": "boolean",
-                            "value": "",
-                            "reference": null,
-                            "checked": true,
                             "number": 0,
                             "options": "",
                             "hidden": false
@@ -3670,18 +3442,6 @@
                             "number": 0,
                             "options": "",
                             "hidden": false
-                          },
-                          {
-                            "_id": "AAAAAAGOYB2ZXkVim6U=",
-                            "name": "Required",
-                            "ownedElements": [],
-                            "kind": "boolean",
-                            "value": "",
-                            "reference": null,
-                            "checked": false,
-                            "number": 0,
-                            "options": "",
-                            "hidden": false
                           }
                         ],
                         "stereotype": {
@@ -3819,7 +3579,7 @@
                           "isLeaf": false,
                           "isActive": false
                         },
-                        "multiplicity": "",
+                        "multiplicity": "0..1",
                         "isReadOnly": false,
                         "isOrdered": false,
                         "isUnique": false,
@@ -3842,18 +3602,6 @@
                             "value": "Price",
                             "reference": null,
                             "checked": false,
-                            "number": 0,
-                            "options": "",
-                            "hidden": false
-                          },
-                          {
-                            "_id": "AAAAAAGPUpVCTkL/Joo=",
-                            "name": "Required",
-                            "ownedElements": [],
-                            "kind": "boolean",
-                            "value": "",
-                            "reference": null,
-                            "checked": true,
                             "number": 0,
                             "options": "",
                             "hidden": false
@@ -4017,18 +3765,6 @@
                             "value": "V.I.P.",
                             "reference": null,
                             "checked": false,
-                            "number": 0,
-                            "options": "",
-                            "hidden": false
-                          },
-                          {
-                            "_id": "AAAAAAGPUpZqzUMOneg=",
-                            "name": "Required",
-                            "ownedElements": [],
-                            "kind": "boolean",
-                            "value": "",
-                            "reference": null,
-                            "checked": true,
                             "number": 0,
                             "options": "",
                             "hidden": false
@@ -4251,18 +3987,6 @@
                       "number": 0,
                       "options": "",
                       "hidden": false
-                    },
-                    {
-                      "_id": "AAAAAAGOafhd2aERe3c=",
-                      "name": "Required",
-                      "ownedElements": [],
-                      "kind": "boolean",
-                      "value": "",
-                      "reference": null,
-                      "checked": true,
-                      "number": 0,
-                      "options": "",
-                      "hidden": false
                     }
                   ],
                   "stereotype": {
@@ -4423,18 +4147,6 @@
                       "value": "Count",
                       "reference": null,
                       "checked": false,
-                      "number": 0,
-                      "options": "",
-                      "hidden": false
-                    },
-                    {
-                      "_id": "AAAAAAGOafiqL6EXVco=",
-                      "name": "Required",
-                      "ownedElements": [],
-                      "kind": "boolean",
-                      "value": "",
-                      "reference": null,
-                      "checked": true,
                       "number": 0,
                       "options": "",
                       "hidden": false
@@ -4645,18 +4357,6 @@
             "number": 0,
             "options": "",
             "hidden": false
-          },
-          {
-            "_id": "AAAAAAGOafY7vaEF2LE=",
-            "name": "Required",
-            "ownedElements": [],
-            "kind": "boolean",
-            "value": "",
-            "reference": null,
-            "checked": true,
-            "number": 0,
-            "options": "",
-            "hidden": false
           }
         ],
         "stereotype": {
@@ -4817,18 +4517,6 @@
             "value": "Product",
             "reference": null,
             "checked": false,
-            "number": 0,
-            "options": "",
-            "hidden": false
-          },
-          {
-            "_id": "AAAAAAGOafbBNKEL06o=",
-            "name": "Required",
-            "ownedElements": [],
-            "kind": "boolean",
-            "value": "",
-            "reference": null,
-            "checked": true,
             "number": 0,
             "options": "",
             "hidden": false
@@ -5014,18 +4702,6 @@
                   "number": 0,
                   "options": "",
                   "hidden": false
-                },
-                {
-                  "_id": "AAAAAAGOX/KNxjZJBDk=",
-                  "name": "Required",
-                  "ownedElements": [],
-                  "kind": "boolean",
-                  "value": "",
-                  "reference": null,
-                  "checked": true,
-                  "number": 0,
-                  "options": "",
-                  "hidden": false
                 }
               ],
               "stereotype": {
@@ -5186,18 +4862,6 @@
                   "value": "Name",
                   "reference": null,
                   "checked": false,
-                  "number": 0,
-                  "options": "",
-                  "hidden": false
-                },
-                {
-                  "_id": "AAAAAAGOX/PhfpTPw3c=",
-                  "name": "Required",
-                  "ownedElements": [],
-                  "kind": "boolean",
-                  "value": "",
-                  "reference": null,
-                  "checked": true,
                   "number": 0,
                   "options": "",
                   "hidden": false
@@ -5364,18 +5028,6 @@
                   "number": 0,
                   "options": "",
                   "hidden": false
-                },
-                {
-                  "_id": "AAAAAAGOYB2ZXkVim6U=",
-                  "name": "Required",
-                  "ownedElements": [],
-                  "kind": "boolean",
-                  "value": "",
-                  "reference": null,
-                  "checked": false,
-                  "number": 0,
-                  "options": "",
-                  "hidden": false
                 }
               ],
               "stereotype": {
@@ -5513,7 +5165,7 @@
                 "isLeaf": false,
                 "isActive": false
               },
-              "multiplicity": "",
+              "multiplicity": "0..1",
               "isReadOnly": false,
               "isOrdered": false,
               "isUnique": false,
@@ -5536,18 +5188,6 @@
                   "value": "Price",
                   "reference": null,
                   "checked": false,
-                  "number": 0,
-                  "options": "",
-                  "hidden": false
-                },
-                {
-                  "_id": "AAAAAAGPUpVCTkL/Joo=",
-                  "name": "Required",
-                  "ownedElements": [],
-                  "kind": "boolean",
-                  "value": "",
-                  "reference": null,
-                  "checked": true,
                   "number": 0,
                   "options": "",
                   "hidden": false
@@ -5711,18 +5351,6 @@
                   "value": "V.I.P.",
                   "reference": null,
                   "checked": false,
-                  "number": 0,
-                  "options": "",
-                  "hidden": false
-                },
-                {
-                  "_id": "AAAAAAGPUpZqzUMOneg=",
-                  "name": "Required",
-                  "ownedElements": [],
-                  "kind": "boolean",
-                  "value": "",
-                  "reference": null,
-                  "checked": true,
                   "number": 0,
                   "options": "",
                   "hidden": false
@@ -5926,18 +5554,6 @@
             "number": 0,
             "options": "",
             "hidden": false
-          },
-          {
-            "_id": "AAAAAAGOafhd2aERe3c=",
-            "name": "Required",
-            "ownedElements": [],
-            "kind": "boolean",
-            "value": "",
-            "reference": null,
-            "checked": true,
-            "number": 0,
-            "options": "",
-            "hidden": false
           }
         ],
         "stereotype": {
@@ -6098,18 +5714,6 @@
             "value": "Count",
             "reference": null,
             "checked": false,
-            "number": 0,
-            "options": "",
-            "hidden": false
-          },
-          {
-            "_id": "AAAAAAGOafiqL6EXVco=",
-            "name": "Required",
-            "ownedElements": [],
-            "kind": "boolean",
-            "value": "",
-            "reference": null,
-            "checked": true,
             "number": 0,
             "options": "",
             "hidden": false

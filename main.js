@@ -3,13 +3,13 @@ const ejs = require("ejs");
 const { faker } = require("@faker-js/faker");
 const beautify = require("json-beautify");
 const { Case } = require('change-case-all');
-const reactHelper = require("./templates/react/_helpers");
 const { modelSchema, classesSchema } = require('./joi-schemas.js');
 const _deepCopy = require('./deep-copy.js');
-const { entityDependecySort, primitiveTypes, defaultValues } = require("./templates/api/_helpers");
+const _csharp = require("./templates/api/_csharp.js");
 const path = require("path");
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
+const _star = require("./templates/_starHelpers");
 
 function init() {
 
@@ -168,16 +168,16 @@ function getEntities() {
     const namespace = getNamespace();
 
       await generateTemplete(__dirname + '/templates/api/controller.ejs', `\\Web\\Controllers\\${model.name}Controller.cs`, { model, info: { namespace }, _case: Case }, confirmWriteFileSync);
-      await generateTemplete(__dirname + '/templates/api/model.ejs', `\\Web\\Models\\${model.name}.cs`, { model, info: { namespace: namespace + ".Models" }, primitiveTypes, defaultValues }, confirmWriteFileSync);
+      await generateTemplete(__dirname + '/templates/api/model.ejs', `\\Web\\Models\\${model.name}.cs`, { model, info: { namespace: namespace + ".Models" }, _csharp, _star }, confirmWriteFileSync);
       await generateTemplete(__dirname + '/templates/api/test.ejs', `\\ApiTest\\${model.name}Test.cs`, { model, info: { namespace }, faker: faker }, confirmWriteFileSync);
       await generateTemplete(__dirname + '/templates/react/ui.ejs', `\\Web\\ClientApp\\src\\components\\Ui${model.name}.jsx`, { model, info: { namespace }, _case: Case }, confirmWriteFileSync)
-      await generateTemplete(__dirname + '/templates/react/modal.ejs', `\\Web\\ClientApp\\src\\components\\Modal${model.name}.jsx`, { model, info: { namespace }, _case: Case, helper: reactHelper }, confirmWriteFileSync)
+      await generateTemplete(__dirname + '/templates/react/modal.ejs', `\\Web\\ClientApp\\src\\components\\Modal${model.name}.jsx`, { model, info: { namespace }, _case: Case , _star}, confirmWriteFileSync)
 
 
       for (operation of model.operations) {
-        await generateTemplete(__dirname + '/templates/api/api-model.ejs', `\\Web\\ApiModels\\${operation.parameters.find(parameter => parameter.direction !== 'return').type.name}.cs`, { info: { namespace: namespace + ".ApiModels" }, model: operation.parameters.find(parameter => parameter.direction !== 'return').type, primitiveTypes, defaultValues }, confirmWriteFileSync)
-        await generateTemplete(__dirname + '/templates/api/api-model.ejs', `\\Web\\ApiModels\\${operation.parameters.find(parameter => parameter.direction === 'return').type.name}.cs`, { info: { namespace: namespace + ".ApiModels" }, model: operation.parameters.find(parameter => parameter.direction === 'return').type, primitiveTypes, defaultValues }, confirmWriteFileSync)
-        await generateTemplete(__dirname + '/templates/react/operation.ejs', `\\Web\\ClientApp\\src\\components\\Ui${model.name + operation.name}.jsx`, { operation, info: { name: model.name }, _case: Case, helper: reactHelper }, confirmWriteFileSync)
+        await generateTemplete(__dirname + '/templates/api/api-model.ejs', `\\Web\\ApiModels\\${operation.parameters.find(parameter => parameter.direction !== 'return').type.name}.cs`, { info: { namespace: namespace + ".ApiModels" }, model: operation.parameters.find(parameter => parameter.direction !== 'return').type, _csharp, _star }, confirmWriteFileSync)
+        await generateTemplete(__dirname + '/templates/api/api-model.ejs', `\\Web\\ApiModels\\${operation.parameters.find(parameter => parameter.direction === 'return').type.name}.cs`, { info: { namespace: namespace + ".ApiModels" }, model: operation.parameters.find(parameter => parameter.direction === 'return').type, _csharp, _star }, confirmWriteFileSync)
+        await generateTemplete(__dirname + '/templates/react/operation.ejs', `\\Web\\ClientApp\\src\\components\\Ui${model.name + operation.name}.jsx`, { operation, info: { name: model.name }, _case: Case, _star }, confirmWriteFileSync)
       }
 
     
@@ -220,7 +220,7 @@ const solutionCommand = async () => {
 
 
 const seederCommand = async ()  => {
-  await generateTemplete(__dirname + '/templates/api/seeder.ejs', `\\ApiTest\\Seeders\\DefaultSeeder.cs`, { count: 10, entities: getEntities(), info: { namespace: getNamespace() }, faker, entityDependecySort }, confirmWriteFileSync)
+  await generateTemplete(__dirname + '/templates/api/seeder.ejs', `\\ApiTest\\Seeders\\DefaultSeeder.cs`, { count: 10, entities: getEntities(), info: { namespace: getNamespace() }, faker, _csharp }, confirmWriteFileSync)
 }
 
 

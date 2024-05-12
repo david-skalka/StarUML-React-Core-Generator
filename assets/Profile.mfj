@@ -20,15 +20,6 @@
 					},
 					"name": "Description",
 					"type": ""
-				},
-				{
-					"_type": "UMLAttribute",
-					"_id": "AAAAAAGORnf3O8vHYRE=",
-					"_parent": {
-						"$ref": "AAAAAAGOPa4I68dPDY0="
-					},
-					"name": "Required",
-					"type": "boolean"
 				}
 			],
 			"icon": {

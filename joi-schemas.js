@@ -9,7 +9,7 @@ const stereotype = (name, tags) => Joi.object({
   })
 });
 
-const fieldSchema = stereotype('Field', ['Description', 'Required']);
+const fieldSchema = stereotype('Field', ['Description']);
 
 
 const entitySchema = stereotype('Entity', ['Plural']).append({

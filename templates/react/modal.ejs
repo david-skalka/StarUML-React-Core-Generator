@@ -11,7 +11,7 @@ export class Madal<%= model.name %> extends Component {
       super(props);
       this.handleOnShow = this.handleOnShow.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
-      this.defaultFormData = { <%- helper.getDefaultValues(model.attributes) %> }
+      this.defaultFormData = <%- include("default-object-initializer", {model: model, _case } ) %>
       this.state = {
           formData: this.defaultFormData, errors: {}, <%= model.attributes.filter(x=>x.type.stereotype.name!=="Primitive").map(attr=> _case.camel(attr.name + 'Options') + ": []" ) %>
       };
@@ -40,7 +40,7 @@ export class Madal<%= model.name %> extends Component {
         const requestOptions = {
             method: this.state.formData.id===0 ? 'POST' : 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(this.state.formData)
+            body: JSON.stringify({...this.state.formData, <%= model.attributes.filter(x=>x.type.name==='DateTime').map(attr=>_case.camel(attr.name) + ': new Date(this.state.formData.'+_case.camel(attr.name)+').toISOString()'  )  %>})
         };
         const response = await fetch('<%= model.name.toLowerCase() %>', requestOptions);
 
@@ -133,7 +133,7 @@ const renderComplex = (required, name, description, idName)=>{  %>
                 } 
 model.attributes.filter(x=>!x.isID).forEach(attr=> {  
 const description = attr.tags.find(x => x.name == "Description").value 
-const required = attr.tags.find(x => x.name == "Required").checked 
+const required = !_star.attrIsNullable(attr);
     switch (attr.type.name) {
         case "Decimal":
         case "Integer":

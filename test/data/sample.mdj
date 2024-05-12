@@ -135,7 +135,7 @@
 											"top": 418,
 											"width": 395.91943359375,
 											"height": 13,
-											"text": "«Field»+Id: Integer {id, Description=\"Id\", Required=true}",
+											"text": "«Field»+Id: Integer {id, Description=\"Id\"}",
 											"horizontalAlignment": 0
 										},
 										{
@@ -152,7 +152,7 @@
 											"top": 433,
 											"width": 395.91943359375,
 											"height": 13,
-											"text": "«Field»+Name: Text {Description=\"Name\", Required=true}",
+											"text": "«Field»+Name: Text {Description=\"Name\"}",
 											"horizontalAlignment": 0
 										},
 										{
@@ -169,7 +169,7 @@
 											"top": 448,
 											"width": 395.91943359375,
 											"height": 13,
-											"text": "«Field»+Note: Text {Description=\"Note\", Required=false}",
+											"text": "«Field»+Note: Text[0..1] {Description=\"Note\"}",
 											"horizontalAlignment": 0
 										},
 										{
@@ -186,7 +186,7 @@
 											"top": 463,
 											"width": 395.91943359375,
 											"height": 13,
-											"text": "«Field»+Price: Decimal {Description=\"Price\", Required=true}",
+											"text": "«Field»+Price: Decimal {Description=\"Price\"}",
 											"horizontalAlignment": 0
 										},
 										{
@@ -203,7 +203,7 @@
 											"top": 478,
 											"width": 395.91943359375,
 											"height": 13,
-											"text": "«Field»+Vip: Bool {Description=\"V.I.P.\", Required=true}",
+											"text": "«Field»+Vip: Bool {Description=\"V.I.P.\"}",
 											"horizontalAlignment": 0
 										}
 									],
@@ -394,7 +394,7 @@
 											"top": 602,
 											"width": 607.74072265625,
 											"height": 13,
-											"text": "«Field»+Id: Integer {id, Description=\"Id\", Required=true}",
+											"text": "«Field»+Id: Integer {id, Description=\"Id\"}",
 											"horizontalAlignment": 0
 										},
 										{
@@ -411,7 +411,7 @@
 											"top": 617,
 											"width": 607.74072265625,
 											"height": 13,
-											"text": "«Field»+Title: Text {Description=\"Title\", Required=true}",
+											"text": "«Field»+Title: Text {Description=\"Title\"}",
 											"horizontalAlignment": 0
 										},
 										{
@@ -428,7 +428,7 @@
 											"top": 632,
 											"width": 607.74072265625,
 											"height": 13,
-											"text": "«Field»+Content: Text {Description=\"Content\", Required=false}",
+											"text": "«Field»+Content: Text {Description=\"Content\"}",
 											"horizontalAlignment": 0
 										},
 										{
@@ -445,7 +445,7 @@
 											"top": 647,
 											"width": 607.74072265625,
 											"height": 13,
-											"text": "«Field»+Product: Product {Description=\"Product\", Required=true}",
+											"text": "«Field»+Product: Product {Description=\"Product\"}",
 											"horizontalAlignment": 0
 										},
 										{
@@ -462,7 +462,7 @@
 											"top": 662,
 											"width": 607.74072265625,
 											"height": 13,
-											"text": "«Field»+Created: DateTime {Description=\"Created\", Required=true}",
+											"text": "«Field»+Created: DateTime {Description=\"Created\"}",
 											"horizontalAlignment": 0
 										}
 									],
@@ -666,7 +666,7 @@
 											"top": 734,
 											"width": 398.66162109375,
 											"height": 13,
-											"text": "«Field»+Days: Integer {Description=\"Count of days\", Required=true}",
+											"text": "«Field»+Days: Integer {Description=\"Count of days\"}",
 											"horizontalAlignment": 0
 										},
 										{
@@ -683,7 +683,7 @@
 											"top": 749,
 											"width": 398.66162109375,
 											"height": 13,
-											"text": "«Field»+Product: Product {Description=\"Product\", Required=true}",
+											"text": "«Field»+Product: Product {Description=\"Product\"}",
 											"horizontalAlignment": 0
 										}
 									],
@@ -870,7 +870,7 @@
 											"top": 886,
 											"width": 352.4189453125,
 											"height": 13,
-											"text": "«Field»+Interval: Text {Description=\"Interval\", Required=true}",
+											"text": "«Field»+Interval: Text {Description=\"Interval\"}",
 											"horizontalAlignment": 0
 										},
 										{
@@ -887,7 +887,7 @@
 											"top": 901,
 											"width": 352.4189453125,
 											"height": 13,
-											"text": "«Field»+Count: Integer {Description=\"Count\", Required=true}",
+											"text": "«Field»+Count: Integer {Description=\"Count\"}",
 											"horizontalAlignment": 0
 										}
 									],
@@ -1005,16 +1005,6 @@
 									"name": "Description",
 									"kind": "string",
 									"value": "Id"
-								},
-								{
-									"_type": "Tag",
-									"_id": "AAAAAAGOX/KNxjZJBDk=",
-									"_parent": {
-										"$ref": "AAAAAAGOX/EYdTY9i64="
-									},
-									"name": "Required",
-									"kind": "boolean",
-									"checked": true
 								}
 							],
 							"stereotype": {
@@ -1042,16 +1032,6 @@
 									"name": "Description",
 									"kind": "string",
 									"value": "Name"
-								},
-								{
-									"_type": "Tag",
-									"_id": "AAAAAAGOX/PhfpTPw3c=",
-									"_parent": {
-										"$ref": "AAAAAAGOX/LPnTZM4Vk="
-									},
-									"name": "Required",
-									"kind": "boolean",
-									"checked": true
 								}
 							],
 							"stereotype": {
@@ -1078,15 +1058,6 @@
 									"name": "Description",
 									"kind": "string",
 									"value": "Note"
-								},
-								{
-									"_type": "Tag",
-									"_id": "AAAAAAGOYB2ZXkVim6U=",
-									"_parent": {
-										"$ref": "AAAAAAGOX/QYjJTSNCc="
-									},
-									"name": "Required",
-									"kind": "boolean"
 								}
 							],
 							"stereotype": {
@@ -1094,7 +1065,8 @@
 							},
 							"type": {
 								"$ref": "AAAAAAGOX/CgzDYKhJM="
-							}
+							},
+							"multiplicity": "0..1"
 						},
 						{
 							"_type": "UMLAttribute",
@@ -1113,16 +1085,6 @@
 									"name": "Description",
 									"kind": "string",
 									"value": "Price"
-								},
-								{
-									"_type": "Tag",
-									"_id": "AAAAAAGPUpVCTkL/Joo=",
-									"_parent": {
-										"$ref": "AAAAAAGPUpQxckLz1Xo="
-									},
-									"name": "Required",
-									"kind": "boolean",
-									"checked": true
 								}
 							],
 							"stereotype": {
@@ -1149,16 +1111,6 @@
 									"name": "Description",
 									"kind": "string",
 									"value": "V.I.P."
-								},
-								{
-									"_type": "Tag",
-									"_id": "AAAAAAGPUpZqzUMOneg=",
-									"_parent": {
-										"$ref": "AAAAAAGPUpWZMkMC260="
-									},
-									"name": "Required",
-									"kind": "boolean",
-									"checked": true
 								}
 							],
 							"stereotype": {
@@ -1210,16 +1162,6 @@
 									"name": "Description",
 									"kind": "string",
 									"value": "Id"
-								},
-								{
-									"_type": "Tag",
-									"_id": "AAAAAAGOYBq2vEVBegE=",
-									"_parent": {
-										"$ref": "AAAAAAGOYBnoNEU1ctU="
-									},
-									"name": "Required",
-									"kind": "boolean",
-									"checked": true
 								}
 							],
 							"stereotype": {
@@ -1247,16 +1189,6 @@
 									"name": "Description",
 									"kind": "string",
 									"value": "Title"
-								},
-								{
-									"_type": "Tag",
-									"_id": "AAAAAAGOYBypVUVZOcE=",
-									"_parent": {
-										"$ref": "AAAAAAGOYBt5xEVE3KQ="
-									},
-									"name": "Required",
-									"kind": "boolean",
-									"checked": true
 								}
 							],
 							"stereotype": {
@@ -1283,15 +1215,6 @@
 									"name": "Description",
 									"kind": "string",
 									"value": "Content"
-								},
-								{
-									"_type": "Tag",
-									"_id": "AAAAAAGOYB0/dkVf2pM=",
-									"_parent": {
-										"$ref": "AAAAAAGOYBvSc0VL9pI="
-									},
-									"name": "Required",
-									"kind": "boolean"
 								}
 							],
 							"stereotype": {
@@ -1318,16 +1241,6 @@
 									"name": "Description",
 									"kind": "string",
 									"value": "Product"
-								},
-								{
-									"_type": "Tag",
-									"_id": "AAAAAAGOYB5W5kVxKiY=",
-									"_parent": {
-										"$ref": "AAAAAAGOYB2zjEVlBXs="
-									},
-									"name": "Required",
-									"kind": "boolean",
-									"checked": true
 								}
 							],
 							"stereotype": {
@@ -1354,16 +1267,6 @@
 									"name": "Description",
 									"kind": "string",
 									"value": "Created"
-								},
-								{
-									"_type": "Tag",
-									"_id": "AAAAAAGPUpdehUMdCI4=",
-									"_parent": {
-										"$ref": "AAAAAAGPUpa1MkMRpY8="
-									},
-									"name": "Required",
-									"kind": "boolean",
-									"checked": true
 								}
 							],
 							"stereotype": {
@@ -1450,16 +1353,6 @@
 									"name": "Description",
 									"kind": "string",
 									"value": "Count of days"
-								},
-								{
-									"_type": "Tag",
-									"_id": "AAAAAAGOafY7vaEF2LE=",
-									"_parent": {
-										"$ref": "AAAAAAGOaeFwbqCwKdI="
-									},
-									"name": "Required",
-									"kind": "boolean",
-									"checked": true
 								}
 							],
 							"stereotype": {
@@ -1486,16 +1379,6 @@
 									"name": "Description",
 									"kind": "string",
 									"value": "Product"
-								},
-								{
-									"_type": "Tag",
-									"_id": "AAAAAAGOafbBNKEL06o=",
-									"_parent": {
-										"$ref": "AAAAAAGOafFMCKDk8Ko="
-									},
-									"name": "Required",
-									"kind": "boolean",
-									"checked": true
 								}
 							],
 							"stereotype": {
@@ -1532,16 +1415,6 @@
 									"name": "Description",
 									"kind": "string",
 									"value": "Interval"
-								},
-								{
-									"_type": "Tag",
-									"_id": "AAAAAAGOafhd2aERe3c=",
-									"_parent": {
-										"$ref": "AAAAAAGOafMox6Du2fk="
-									},
-									"name": "Required",
-									"kind": "boolean",
-									"checked": true
 								}
 							],
 							"stereotype": {
@@ -1568,16 +1441,6 @@
 									"name": "Description",
 									"kind": "string",
 									"value": "Count"
-								},
-								{
-									"_type": "Tag",
-									"_id": "AAAAAAGOafiqL6EXVco=",
-									"_parent": {
-										"$ref": "AAAAAAGOafOW1KD2nFE="
-									},
-									"name": "Required",
-									"kind": "boolean",
-									"checked": true
 								}
 							],
 							"stereotype": {

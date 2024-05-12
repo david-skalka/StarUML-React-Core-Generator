@@ -1,0 +1,2 @@
+<% const defaultValues = new Map().set('Integer', '0').set('Text', '""').set('DateTime', 'Date.now()').set('Bool', 'false').set('Decimal', '0') -%>
+{ <%- model.attributes.map(x=> x.type.stereotype.name==='Primitive' ? _case.camel(x.name) + ': ' + defaultValues.get(x.type.name) : _case.camel(x.name) + 'Id: -1' ).join(", ")%> }

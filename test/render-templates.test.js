@@ -3,8 +3,8 @@ const ejs = require("ejs");
 const path = require("path");
 const { faker} = require("@faker-js/faker");
 const { Case } = require('change-case-all');
-const reactHelper = require("../templates/react/_helpers");
-const { entityDependecySort, primitiveTypes, defaultValues  } = require("../templates/api/_helpers");
+const _csharp = require("../templates/api/_csharp");
+const _star = require("../templates/_starHelpers");
 
 
 describe("Render templates", () => {
@@ -22,11 +22,11 @@ describe("Render templates", () => {
   });
 
   test("Model", () => {
-    ejs.renderFile(path.dirname(__dirname) + '/templates/api/model.ejs', { model: this.model, primitiveTypes, defaultValues, info: { namespace: "ReactSample" } }, (err, data) => { console.log(data); expect(err).toBe(null); });
+    ejs.renderFile(path.dirname(__dirname) + '/templates/api/model.ejs', { model: this.model, _csharp, _star, info: { namespace: "ReactSample" } }, (err, data) => { console.log(data); expect(err).toBe(null); });
   });
 
   test("ApiModel", () => {
-    ejs.renderFile(path.dirname(__dirname) + '/templates/api/api-model.ejs', { model: this.model, primitiveTypes, defaultValues, info: { namespace: "ReactSample" } }, (err, data) => { console.log(data); expect(err).toBe(null); });
+    ejs.renderFile(path.dirname(__dirname) + '/templates/api/api-model.ejs', { model: this.model, _csharp, _star, info: { namespace: "ReactSample" } }, (err, data) => { console.log(data); expect(err).toBe(null); });
   });
 
 
@@ -36,7 +36,7 @@ describe("Render templates", () => {
 
 
   test("Seed", () => {
-    ejs.renderFile(path.dirname(__dirname) + '/templates/api/seeder.ejs', { count: 10, entities: this.diagram.filter(x => x.stereotype && x.stereotype.name === "Entity"), info: { namespace: "ReactSample" }, faker, entityDependecySort }, (err, data) => { console.log(data); expect(err).toBe(null); });
+    ejs.renderFile(path.dirname(__dirname) + '/templates/api/seeder.ejs', { count: 10, entities: this.diagram.filter(x => x.stereotype && x.stereotype.name === "Entity"), info: { namespace: "ReactSample" }, faker, _csharp }, (err, data) => { console.log(data); expect(err).toBe(null); });
   });
 
 
@@ -51,12 +51,12 @@ describe("Render templates", () => {
 
 
   test("Modal", () => {
-    ejs.renderFile(path.dirname(__dirname) + '/templates/react/modal.ejs', { model: this.model, info: { namespace: "ReactSample" }, _case: Case, helper: reactHelper }, (err, data) => { console.log(data); expect(err).toBe(null); });
+    ejs.renderFile(path.dirname(__dirname) + '/templates/react/modal.ejs', { model: this.model, info: { namespace: "ReactSample" }, _case: Case, _star }, (err, data) => { console.log(data); expect(err).toBe(null); });
   });
 
 
   test("Operation", () => {
-    ejs.renderFile(path.dirname(__dirname) + '/templates/react/operation.ejs', { operation: this.model.operations.find(x => x.name === "Summary"), info: { name: this.model.name }, _case: Case, helper: reactHelper }, (err, data) => { console.log(data); expect(err).toBe(null); });
+    ejs.renderFile(path.dirname(__dirname) + '/templates/react/operation.ejs', { operation: this.model.operations.find(x => x.name === "Summary"), info: { name: this.model.name }, _case: Case, _star  }, (err, data) => { console.log(data); expect(err).toBe(null); });
   });
 
 

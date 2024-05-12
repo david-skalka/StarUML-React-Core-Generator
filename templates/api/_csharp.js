@@ -31,20 +31,6 @@ function entityDependecySort(entities){
 }
 
 
-function getType(attr){
-    let retD = attr.type.name;
-    if(attr.type.stereotype.name==="Primitive"){
-        retD = primitivesTypes.get(attr.type.name);
-    } 
-
-    const required = attr.tags.find(x => x.name == "Required").checked;
-    if(required){
-        return `${getTypes(attr)}?`;
-    }
-}
-
-
 exports.primitiveTypes = primitivesTypes;
-exports.getType = getType;
 exports.entityDependecySort = entityDependecySort;
 exports.defaultValues = defaultValues;

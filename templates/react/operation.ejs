@@ -8,7 +8,7 @@ export class Ui<%= info.name + operation.name %> extends Component {
 
   constructor(props) {
     super(props);
-    this.defaultInput = { <%- helper.getDefaultValues(inputType.attributes) %> }
+    this.defaultInput = <%- include("default-object-initializer", {model: inputType, _case } ) %>
     this.state = { <%= _case.camel(info.name + pluralName) %>: [], loading: true, formData: this.defaultInput, errors: {}, <%= inputType.attributes.filter(x=>x.type.stereotype.name!=="Primitive").map(attr=> _case.camel(attr.name + 'Options') + ": []" ) %> };
   }
 
@@ -124,7 +124,7 @@ const renderComplex = (required, name, description, idName)=>{  %>
 <%
 inputType.attributes.filter(x=>!x.isID).forEach(attr=> {  
 const description = attr.tags.find(x => x.name == "Description").value 
-const required = attr.tags.find(x => x.name == "Required").checked 
+const required = !_star.attrIsNullable(attr);
     switch (attr.type.name) {
         case "Integer":
             renderInteger(required, attr.name, description)
