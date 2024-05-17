@@ -128,7 +128,10 @@ function init() {
 
   app.commands.register(
     "react-core:export-metadata",
-    (arg) => run(exportMetadataCommand, arg),
+      (arg) => {  var cls = app.repository.select("@UMLClass")
+      const clss = _deepCopy(cls, 20, 0, ['_parent']);
+      fs.writeFileSync(arg, beautify(clss, null, 2, 100));
+  },
     "Export metadata"
   );
 
@@ -236,15 +239,6 @@ function getEntities() {
 }
 
 
-
-
-
-
-const exportMetadataCommand = (path) => {
-  var cls = app.repository.select("@UMLClass")
-  const clss = _deepCopy(cls, 20, 0, ['_parent']);
-  fs.writeFileSync(path, beautify(clss, null, 2, 100));
-}
 
 
 exports.init = init;
