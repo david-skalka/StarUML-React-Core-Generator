@@ -12,26 +12,30 @@ describe("Render templates", () => {
   beforeEach(() => {
     this.diagram = JSON.parse(fs.readFileSync(`test/data/sample.json`));
 
-    this.model = this.diagram.find(x => x.name === "Comment");
+    
   });
 
 
   test("Controller", () => {
-    ejs.renderFile(path.dirname(__dirname) + '/templates/api/controller.ejs', { model: this.model, info: { namespace: "ReactSample" }, _case: Case }, (err, data) => { console.log(data); expect(err).toBe(null); });
+    const model = this.diagram.find(x => x.name === "Comment");
+    ejs.renderFile(path.dirname(__dirname) + '/templates/api/controller.ejs', { model, info: { namespace: "ReactSample" }, _case: Case }, (err, data) => { console.log(data); expect(err).toBe(null); });
 
   });
 
   test("Model", () => {
-    ejs.renderFile(path.dirname(__dirname) + '/templates/api/model.ejs', { model: this.model, _csharp, _star, info: { namespace: "ReactSample" } }, (err, data) => { console.log(data); expect(err).toBe(null); });
+    const model = this.diagram.find(x => x.name === "Comment");
+    ejs.renderFile(path.dirname(__dirname) + '/templates/api/model.ejs', { model, _csharp, _star, info: { namespace: "ReactSample" } }, (err, data) => { console.log(data); expect(err).toBe(null); });
   });
 
   test("ApiModel", () => {
-    ejs.renderFile(path.dirname(__dirname) + '/templates/api/api-model.ejs', { model: this.model, _csharp, _star, info: { namespace: "ReactSample" } }, (err, data) => { console.log(data); expect(err).toBe(null); });
+    const model = this.diagram.find(x => x.name === "Comment");
+    ejs.renderFile(path.dirname(__dirname) + '/templates/api/api-model.ejs', { model, _csharp, _star, info: { namespace: "ReactSample" } }, (err, data) => { console.log(data); expect(err).toBe(null); });
   });
 
 
   test("Faker object initializer", () => {
-    ejs.renderFile(path.dirname(__dirname) + '/templates/api/faker-object-initializer.ejs', { model: this.model, override: new Map(), faker: faker }, (err, data) => { console.log(data); expect(err).toBe(null); });
+    const model = this.diagram.find(x => x.name === "Comment");
+    ejs.renderFile(path.dirname(__dirname) + '/templates/api/faker-object-initializer.ejs', { model, override: new Map(), faker: faker }, (err, data) => { console.log(data); expect(err).toBe(null); });
   });
 
 
@@ -41,22 +45,26 @@ describe("Render templates", () => {
 
 
   test("Test", () => {
-    ejs.renderFile(path.dirname(__dirname) + '/templates/api/test.ejs', { model: this.model, info: { namespace: "ReactSample" }, faker }, (err, data) => { console.log(data); expect(err).toBe(null); });
+    const model = this.diagram.find(x => x.name === "Comment");
+    ejs.renderFile(path.dirname(__dirname) + '/templates/api/test.ejs', { model, info: { namespace: "ReactSample" }, faker }, (err, data) => { console.log(data); expect(err).toBe(null); });
   });
 
 
   test("Ui", () => {
-    ejs.renderFile(path.dirname(__dirname) + '/templates/react/ui.ejs', { model: this.model, info: { namespace: "ReactSample" }, _case: Case }, (err, data) => { console.log(data); expect(err).toBe(null); });
+    const model = this.diagram.find(x => x.name === "Comment");
+    ejs.renderFile(path.dirname(__dirname) + '/templates/react/ui.ejs', { model, info: { namespace: "ReactSample" }, _case: Case }, (err, data) => { console.log(data); expect(err).toBe(null); });
   });
 
 
   test("Modal", () => {
-    ejs.renderFile(path.dirname(__dirname) + '/templates/react/modal.ejs', { model: this.model, info: { namespace: "ReactSample" }, _case: Case, _star }, (err, data) => { console.log(data); expect(err).toBe(null); });
+    const model = this.diagram.find(x => x.name === "Comment");
+    ejs.renderFile(path.dirname(__dirname) + '/templates/react/modal.ejs', { model, info: { namespace: "ReactSample" }, _case: Case, _star }, (err, data) => { console.log(data); expect(err).toBe(null); });
   });
 
 
   test("Operation", () => {
-    ejs.renderFile(path.dirname(__dirname) + '/templates/react/operation.ejs', { operation: this.model.operations.find(x => x.name === "Summary"), info: { name: this.model.name }, _case: Case, _star  }, (err, data) => { console.log(data); expect(err).toBe(null); });
+    const model = this.diagram.find(x => x.name === "Comment");
+    ejs.renderFile(path.dirname(__dirname) + '/templates/react/operation.ejs', { operation: model.operations.find(x => x.name === "Summary"), info: { name: model.name }, _case: Case, _star  }, (err, data) => { console.log(data); expect(err).toBe(null); });
   });
 
 
