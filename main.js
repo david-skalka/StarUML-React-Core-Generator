@@ -20,7 +20,7 @@ function init() {
     "react-core:generate-solution",
     async () => {
       
-    const command = ()=> {
+    const command = async ()=> {
       const projectPath = getSolutionPath();
       const namespace = getNamespace();
       const pipeline =[
@@ -45,7 +45,7 @@ function init() {
         { name: 'ejs', src: '/templates/api/custom-web-app-factory.ejs', dest: `\\ApiTest\\CustomWebApplicationFactory.cs`, vars: { info: { namespace } }},
         { name: 'ejs', src: '/templates/api/iseeder.ejs', dest: `\\ApiTest\\ISeeder.cs`, vars: { info: { namespace } }},
       ]
-      generate(pipeline)
+      await generate(pipeline)
     }
      
       
@@ -120,7 +120,7 @@ function init() {
 
         
 
-        generate(pipeline)
+        await generate(pipeline)
 
       }
     }
