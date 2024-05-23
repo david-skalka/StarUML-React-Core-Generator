@@ -14,8 +14,7 @@
 - Generate complete application
 - Generate integration test
 - Generate test data seed using fakerjs
-- Generate @UMLClass operations for non CRUD actions (e.g. SQL aggregation actions)
-- Initialize solution
+- Generate extra actions from @UMLClass operations (e.g. SQL aggregation actions)
 - Simple and modificable
 - Robus @UMLModel validation
 - Fast template development using Jest runner
