@@ -20,7 +20,7 @@ function init() {
     "react-core:generate-solution",
     async () => {
       
-    
+    const command = ()=> {
       const projectPath = getSolutionPath();
       const namespace = getNamespace();
       const pipeline =[
@@ -45,9 +45,12 @@ function init() {
         { name: 'ejs', src: '/templates/api/custom-web-app-factory.ejs', dest: `\\ApiTest\\CustomWebApplicationFactory.cs`, vars: { info: { namespace } }},
         { name: 'ejs', src: '/templates/api/iseeder.ejs', dest: `\\ApiTest\\ISeeder.cs`, vars: { info: { namespace } }},
       ]
+      generate(pipeline)
+    }
+     
       
     
-      await run(pipeline)
+      await executeCommand(command)
     
     },
     "Generate Project"
@@ -55,13 +58,13 @@ function init() {
 
   app.commands.register(
     "react-core:generate-db-context",
-    () => run([{ name: 'ejs', src: '/templates/api/db-context.ejs', dest: `\\Web\\ApplicationDbContext.cs`, vars: { info: { namespace: getNamespace() }, entities: getEntities() } }]),
+    () => executeCommand(()=>generate([{ name: 'ejs', src: '/templates/api/db-context.ejs', dest: `\\Web\\ApplicationDbContext.cs`, vars: { info: { namespace: getNamespace() }, entities: getEntities() } }])),
     "Generate db-context"
   );
 
   app.commands.register(
     "react-core:generate-seeder",
-    () => run([{ name: 'ejs', src: '/templates/api/seeder.ejs', dest: `\\ApiTest\\Seeders\\DefaultSeeder.cs`, vars: { count: 10, entities: getEntities(), info: { namespace: getNamespace() }, faker, _csharp } }]),
+    () => executeCommand(()=>generate([{ name: 'ejs', src: '/templates/api/seeder.ejs', dest: `\\ApiTest\\Seeders\\DefaultSeeder.cs`, vars: { count: 10, entities: getEntities(), info: { namespace: getNamespace() }, faker, _csharp } }])),
     "Generate Test seeder"
   );
 
@@ -69,20 +72,20 @@ function init() {
 
   app.commands.register(
     "react-core:generate-setup-proxy",
-    () => run([{ name: 'ejs', src: '/templates/react/setup-proxy.ejs', dest: `\\Web\\ClientApp\\src\\setupProxy.js`, vars: { entities: getEntities(), _case: Case } }]),
+    () => executeCommand(()=>generate([{ name: 'ejs', src: '/templates/react/setup-proxy.ejs', dest: `\\Web\\ClientApp\\src\\setupProxy.js`, vars: { entities: getEntities(), _case: Case } }])),
     "Generate setup proxy"
   );
 
 
   app.commands.register(
     "react-core:generate-app-routes",
-    () => run([{ name: 'ejs', src: '/templates/react/app-routes.ejs', dest: `\\Web\\ClientApp\\src\\AppRoutes.js`, vars: { entities: getEntities(), _case: Case } }]),
+    () => executeCommand(()=> generate([{ name: 'ejs', src: '/templates/react/app-routes.ejs', dest: `\\Web\\ClientApp\\src\\AppRoutes.js`, vars: { entities: getEntities(), _case: Case } }])),
     "Generate app routes"
   );
 
   app.commands.register(
     "react-core:generate-nav-menu",
-    () => run([{ name: 'ejs', src: '/templates/react/nav-menu.ejs', dest: `\\Web\\ClientApp\\src\\components\\NavMenu.js`, vars: { entities: getEntities(), _case: Case } }]),
+    () => executeCommand(()=> generate([{ name: 'ejs', src: '/templates/react/nav-menu.ejs', dest: `\\Web\\ClientApp\\src\\components\\NavMenu.js`, vars: { entities: getEntities(), _case: Case } }])),
     "Generate nav menu"
   );
 
@@ -90,7 +93,7 @@ function init() {
     "react-core:generate-entity",
     async () => {
 
-
+      const command = async ()=> {
       var classes = getEntities();
       const { buttonId, returnValue } = await app.elementListPickerDialog.showDialog("Select a set of Class", classes);
 
@@ -115,11 +118,14 @@ function init() {
           pipeline.push({ name: 'ejs', src:  '/templates/react/operation.ejs', dest:  `\\Web\\ClientApp\\src\\components\\Ui${model.name + operation.name}.jsx`, vars: { operation, info: { name: model.name }, _case: Case, _star }})
         }
 
+        
 
-        await run(pipeline)
+        generate(pipeline)
 
       }
-
+    }
+    
+    await executeCommand(command)
       
     },
     "Generate Entity"
@@ -139,7 +145,27 @@ function init() {
 }
 
 
-async function run(pipeline) {
+
+async function executeCommand(fn) {
+
+  const validationResult = validate();
+  if(validationResult!==null){
+    app.dialogs.showInfoDialog(validationResult)
+    return;
+  }
+
+  try {
+    
+    await fn();
+    app.toast.info("Done");
+  } catch (e) {
+    console.error(e);
+    app.dialogs.showAlertDialog(e.message)
+  }
+}
+
+
+async function generate(pipeline) {
   const pipelineCommands = new Map();
 
   pipelineCommands.set('ejs', async (item)=>{
@@ -157,22 +183,11 @@ async function run(pipeline) {
   pipelineCommands.set('rm', (item)=> fs.unlinkSync(path.join( getSolutionPath() ,item.file)));
   pipelineCommands.set('mkdir', (item)=> fs.mkdirSync(path.join( getSolutionPath() ,item.file)));
 
-  try {
-    validate();
-
-
-    for (command of pipeline) {
-      const commandFn = pipelineCommands.get(command.name);
-      if (commandFn) {
-        await commandFn(command);
-      }
+  for (command of pipeline) {
+    const commandFn = pipelineCommands.get(command.name);
+    if (commandFn) {
+      await commandFn(command);
     }
-
-    app.toast.info("Done");
-
-  } catch (e) {
-    console.error(e);
-    app.dialogs.showAlertDialog(e.message)
   }
 
 }
@@ -200,7 +215,10 @@ function getSolutionPath() {
 
 
 function validate() {
-  var diagram = app.repository.select("@UMLModel");
+  
+  var diagram = app.selections.getSelectedModels()
+
+  if(diagram.length === 0) return "Select a model";
 
   const validationResult = modelSchema.validate(diagram[0], {
     allowUnknown: true,
@@ -208,7 +226,7 @@ function validate() {
   });
 
   if (validationResult.error) {
-    throw new Error("@UMLModel validation errors: " + validationResult.error.details.map(x => x.message).join('\n'));
+    return "@UMLModel validation errors: " + validationResult.error.details.map(x => x.message).join('\n');
   }
 
   var classes = app.repository.select("@UMLClass")
@@ -219,19 +237,20 @@ function validate() {
   });
 
   if (validationResultCls.error) {
-    throw new Error("@UMLClass validation errors: " + validationResultCls.error.details.map(x => x.message).join('\n'));
+    return "@UMLClass validation errors: " + validationResultCls.error.details.map(x => x.message).join('\n');
   }
 
   if (!fs.existsSync(getSolutionPath())) {
-    throw new Error("Solution path does not exist");
+    return "Solution path does not exist";
   }
+
+  return null;
 
 }
 
 function getNamespace() {
-  var diagram = app.repository.select("@UMLModel");
-  const umlModel = diagram.find(x => x.stereotype.name === "ReactCoreGen");
-  return umlModel.tags.find(x => x.name === "Namespace").value;
+  var diagram = app.selections.getSelectedModels()
+  return diagram[0].tags.find(x => x.name === "Namespace").value;
 }
 
 function getEntities() {
