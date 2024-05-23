@@ -19,7 +19,7 @@ using Microsoft.Extensions.DependencyInjection;
 using <%= info.namespace %>;
 using <%= info.namespace %>.Models;
 using <%= info.namespace %>.ApiModels;
-namespace <%= info.namespace %>Test
+namespace <%= info.namespace %>IntegrationTest
 {
     public class <%= model.name %>Test
     {
@@ -80,21 +80,21 @@ namespace <%= info.namespace %>Test
         }
 
 
-        [Test, Property("Seeder", "<%= info.namespace %>Test.Seeders.DefaultSeeder")]
+        [Test, Property("Seeder", "<%= info.namespace %>IntegrationTest.Seeders.DefaultSeeder")]
         public async Task <%= model.name %>GetTest()
         {
             var defaultPage = await Client.GetAsync("/<%= model.name %>");
             defaultPage.EnsureSuccessStatusCode();
         }
 
-        [Test, Property("Seeder", "<%= info.namespace %>Test.Seeders.DefaultSeeder")]
+        [Test, Property("Seeder", "<%= info.namespace %>IntegrationTest.Seeders.DefaultSeeder")]
         public async Task <%= model.name %>GetOneTest()
         {
             var defaultPage = await Client.GetAsync("/<%= model.name %>/1");
             defaultPage.EnsureSuccessStatusCode();
         }
 
-        [Test, Property("Seeder", "<%= info.namespace %>Test.Seeders.DefaultSeeder")]
+        [Test, Property("Seeder", "<%= info.namespace %>IntegrationTest.Seeders.DefaultSeeder")]
         public async Task <%= model.name %>CreateTest()
         {
             var arg = <%- include("faker-object-initializer", {model, override: createOverride}) %>; 
@@ -103,7 +103,7 @@ namespace <%= info.namespace %>Test
         }
 
 
-        [Test, Property("Seeder", "<%= info.namespace %>Test.Seeders.DefaultSeeder")]
+        [Test, Property("Seeder", "<%= info.namespace %>IntegrationTest.Seeders.DefaultSeeder")]
         public async Task <%= model.name %>UpdateTest()
         {
             var arg = <%- include("faker-object-initializer", {model, override: updateOverride}) %>; 
@@ -113,7 +113,7 @@ namespace <%= info.namespace %>Test
 
 
         
-        [Test, Property("Seeder", "<%= info.namespace %>Test.Seeders.DefaultSeeder")]
+        [Test, Property("Seeder", "<%= info.namespace %>IntegrationTest.Seeders.DefaultSeeder")]
         public async Task <%= model.name %>DeleteTest()
         {
             var defaultPage = await Client.DeleteAsync("/<%= model.name %>/1"); 
@@ -124,7 +124,7 @@ namespace <%= info.namespace %>Test
 
 
 <% model.operations.forEach(operation=> {  %>
-        [Test, Property("Seeder", "<%= info.namespace %>Test.Seeders.DefaultSeeder")]
+        [Test, Property("Seeder", "<%= info.namespace %>IntegrationTest.Seeders.DefaultSeeder")]
         public async Task <%= operation.name %>Test()
         {
             var arg = <%- include("faker-object-initializer", { model:  operation.parameters.find(parameter=>parameter.direction!=='return').type, override: new Map() }) %>; 

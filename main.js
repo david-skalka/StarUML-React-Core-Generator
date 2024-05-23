@@ -30,20 +30,20 @@ function init() {
         { name: 'shell', cmd: 'npm i react-datepicker', opt: { cwd: projectPath + '\\Web\\ClientApp' }},
         { name: 'shell', cmd: 'dotnet add package Microsoft.EntityFrameworkCore --version 6.0.27', opt: { cwd: projectPath + '\\Web' }},
         { name: 'shell', cmd: 'dotnet add package Microsoft.EntityFrameworkCore.Sqlite --version 6.0.27', opt: { cwd: projectPath + '\\Web' }},
-        { name: 'shell', cmd: 'dotnet new nunit -f net6.0 -n ' + namespace + 'ApiTest -o "' + projectPath + '\\ApiTest"'},
-        { name: 'shell', cmd: 'dotnet add package Microsoft.AspNetCore.Mvc.Testing --version 6.0.27', opt: { cwd: projectPath + '\\ApiTest' }},
-        { name: 'shell', cmd: 'dotnet add reference ../Web', opt: { cwd: projectPath + '\\ApiTest' }},
-        { name: 'shell', cmd: 'dotnet sln ' + namespace + '.sln add Web ApiTest', opt: { cwd: projectPath }},
-        { name: 'rm', file: 'ApiTest\\UnitTest1.cs'},
+        { name: 'shell', cmd: 'dotnet new nunit -f net6.0 -n ' + namespace + 'IntegrationTest -o "' + projectPath + '\\IntegrationTest"'},
+        { name: 'shell', cmd: 'dotnet add package Microsoft.AspNetCore.Mvc.Testing --version 6.0.27', opt: { cwd: projectPath + '\\IntegrationTest' }},
+        { name: 'shell', cmd: 'dotnet add reference ../Web', opt: { cwd: projectPath + '\\IntegrationTest' }},
+        { name: 'shell', cmd: 'dotnet sln ' + namespace + '.sln add Web IntegrationTest', opt: { cwd: projectPath }},
+        { name: 'rm', file: 'IntegrationTest\\UnitTest1.cs'},
         { name: 'rm', file: 'Web\\WeatherForecast.cs'},
         { name: 'rm', file: 'Web\\Controllers\\WeatherForecastController.cs'},
         { name: 'rm', file: 'Web\\Program.cs'},
-        { name: 'mkdir', file: 'ApiTest\\Seeders'},
+        { name: 'mkdir', file: 'IntegrationTest\\Seeders'},
         { name: 'mkdir', file: 'Web\\Models'},
         { name: 'mkdir', file: 'Web\\ApiModels'},
         { name: 'ejs', src: '/templates/api/program.ejs', dest: `\\Web\\Program.cs`, vars: { info: { namespace } }},
-        { name: 'ejs', src: '/templates/api/custom-web-app-factory.ejs', dest: `\\ApiTest\\CustomWebApplicationFactory.cs`, vars: { info: { namespace } }},
-        { name: 'ejs', src: '/templates/api/iseeder.ejs', dest: `\\ApiTest\\ISeeder.cs`, vars: { info: { namespace } }},
+        { name: 'ejs', src: '/templates/api/custom-web-app-factory.ejs', dest: `\\IntegrationTest\\CustomWebApplicationFactory.cs`, vars: { info: { namespace } }},
+        { name: 'ejs', src: '/templates/api/iseeder.ejs', dest: `\\IntegrationTest\\ISeeder.cs`, vars: { info: { namespace } }},
       ]
       await generate(pipeline)
     }
@@ -64,7 +64,7 @@ function init() {
 
   app.commands.register(
     "react-core:generate-seeder",
-    () => executeCommand(()=>generate([{ name: 'ejs', src: '/templates/api/seeder.ejs', dest: `\\ApiTest\\Seeders\\DefaultSeeder.cs`, vars: { count: 10, entities: getEntities(), info: { namespace: getNamespace() }, faker, _csharp } }])),
+    () => executeCommand(()=>generate([{ name: 'ejs', src: '/templates/api/seeder.ejs', dest: `\\IntegrationTest\\Seeders\\DefaultSeeder.cs`, vars: { count: 10, entities: getEntities(), info: { namespace: getNamespace() }, faker, _csharp } }])),
     "Generate Test seeder"
   );
 
@@ -106,7 +106,7 @@ function init() {
         const pipeline = [
           { name: 'ejs', src: '/templates/api/controller.ejs', dest:  `\\Web\\Controllers\\${model.name}Controller.cs`, vars: { model, info: { namespace }, _case: Case }},
           { name: 'ejs',src: '/templates/api/model.ejs', dest: `\\Web\\Models\\${model.name}.cs`, vars: { model, info: { namespace: namespace + ".Models" }, _csharp, _star }},
-          { name: 'ejs',src: '/templates/api/test.ejs', dest: `\\ApiTest\\${model.name}Test.cs`,  vars: { model, info: { namespace }, faker: faker }},
+          { name: 'ejs',src: '/templates/api/test.ejs', dest: `\\IntegrationTest\\${model.name}Test.cs`,  vars: { model, info: { namespace }, faker: faker }},
           { name: 'ejs',src: '/templates/react/ui.ejs', dest: `\\Web\\ClientApp\\src\\components\\Ui${model.name}.jsx`, vars: { model, info: { namespace }, _case: Case }},
           { name: 'ejs',src: '/templates/react/modal.ejs', dest: `\\Web\\ClientApp\\src\\components\\Modal${model.name}.jsx`, vars: { model, info: { namespace }, _case: Case, _star }},
         ]
