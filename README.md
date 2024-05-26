@@ -75,7 +75,7 @@
   </details>
   <details>
     <summary>Test-Driven Development (TDD)</summary>
-    Customize API Actions: Use execution tests for customizing API actions, rather than using Swagger UI or the React client.
+    Use execution tests for customizing API actions, rather than using Swagger UI or the React client.
     Insights TDD application: Ensure 100% test coverage for your application. Use the test coverage report for insights into the application architecture and its test cases.
     Benefits: TDD provides faster development and improved code quality through easier refactoring. Ensures bugs are detected and fixed early, resulting in a more robust and maintainable codebase.
   </details>
