@@ -12,7 +12,7 @@
 
 ## Motivation
 
-Custom Model-Driven Development (MDD) generators with auto-generated fake tests significantly enhance productivity, improve code quality, and foster better collaboration and communication. By leveraging MDD generators, development speed can be accelerated by 2 to 5 times or more compared to traditional software development approaches. Automatic tests with auto-generated fake data further boost development speed by enabling faster code instantiation. This results in improved quality as developers can focus on addressing code development challenges.
+Custom Model-Driven Development (MDD) generators with auto-generated fake data tests significantly enhance productivity, improve code quality, and foster better collaboration and communication. By leveraging MDD generators, development speed can be accelerated by 2 to 5 times or more compared to traditional software development approaches. Automatic tests with auto-generated fake data further boost development speed by enabling faster code instantiation. This results in improved quality as developers can focus on addressing code development challenges.
 
 ### Benefits of Custom Code Generator over JHipster
 - Tailored Solutions: Custom code generators can be tailored specifically to the needs of a particular project or organization, providing greater flexibility and customization options.
