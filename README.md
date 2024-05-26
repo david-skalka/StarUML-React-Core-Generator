@@ -57,6 +57,7 @@
     <summary>Define the Domain Model Using a Class Diagram</summary>
     Identify Main Data Entities: Extract key entities (e.g., users, products, orders) from the business specifications.
     Understand Attributes and Relationships: Analyze their attributes, relationships, and necessary operations.
+    Add stereotypes to @UMLModel ( ReactCoreGen ), @UmlClass ( Entity ), Attributes ( Field ). Fill in their tags accordingly.
   </details>
   <details>
     <summary>Initialize the Project</summary>
