@@ -44,52 +44,57 @@
 
 - Windows: `C:\Users\<user>\AppData\Roaming\StarUML\extensions\user\staruml-react-core-generator`
 
-
-## Usage
-<details open>
-  <summary>Open</summary>
-
-### Define the Domain Model Using a Class Diagram
-
-    Identify Main Data Entities: Extract key entities (e.g., users, products, orders) from the business specifications.
-    Understand Attributes and Relationships: Analyze their attributes, relationships, and necessary operations.
-
-### Initialize the Project
-
-    Generate the Application: Navigate to the menu (Tools > React Core) and follow the steps to generate the entire application.
-
-### Customization
-
-    Create Prototype: Focus on entity relationships and validate them.
-    Specify Action Behavior: Customize the specified actions and then make minor UI changes.
-    Code Merging: Be cautious when merging code customizations after modifying the UML model.
-
-### Continuous Application Updates
-
-    Version Control: Utilize version control systems to merge new UML model changes into the customized application.
-
-### Test-Driven Development (TDD)
-
-    Integration Test Coverage: Ensure 100% test coverage for your application. Use the test coverage report for insights into the application architecture and its test cases.
-    Customize API Actions: Use execution tests for customizing API actions, rather than using Swagger UI or the React client.
-    Benefits: TDD provides faster development and improved code quality through easier refactoring.
-    Early Bug Detection: Ensures bugs are detected and fixed early, resulting in a more robust and maintainable codebase.
-
-### Deploying the Application Using Continuous Deployment (CD)
-
-    Test Execution: It is critical to execute tests using a continuous integration server (e.g., GitHub Actions) to ensure all tests in the repository pass. Disable application deployment unless all tests succeed.
-
-</details>
-
-
-
-
 ## Example
 1. Open `test\data\sample.mdj`
 2. Change Project name using @UMLModel tag editor
 3. Open (`File > Preference > React Core`) and fill Project path
 4. Click on the menu (Tools > React Core ) and perform all the steps to generate the entire application
 5. Run generated solution in Visual studio
+
+
+## Usage
+  <details>
+    <summary>Define the Domain Model Using a Class Diagram</summary>
+    Identify Main Data Entities: Extract key entities (e.g., users, products, orders) from the business specifications.
+    Understand Attributes and Relationships: Analyze their attributes, relationships, and necessary operations.
+  </details>
+  <details>
+    <summary>Initialize the Project</summary>
+    Generate the Application: Navigate to the menu (Tools > React Core) and follow the steps to generate the entire application.
+  </details>
+  <details>
+    <summary>Customization</summary>
+    Create Prototype: Focus on entity relationships and validate them.
+    Specify Action Behavior: Customize the specified actions and then make minor UI changes.
+    Code Merging: Be cautious when fully customizations before modifying the UML model.
+  </details>
+  <details>
+  <summary>Continuous Application Updates</summary>
+    Version Control: Utilize version control systems to merge new UML model changes into the customized application.
+  </details>
+  <details>
+    <summary>Test-Driven Development (TDD)</summary>
+    Customize API Actions: Use execution tests for customizing API actions, rather than using Swagger UI or the React client.
+    Insights TDD application: Ensure 100% test coverage for your application. Use the test coverage report for insights into the application architecture and its test cases.
+    Benefits: TDD provides faster development and improved code quality through easier refactoring. Ensures bugs are detected and fixed early, resulting in a more robust and maintainable codebase.
+  </details>
+    
+
+<details>
+  <summary>Deploying the Application Using Continuous Deployment (CD)</summary>
+Test Execution: It is critical to execute tests using a continuous integration server (e.g., GitHub Actions) to ensure all tests in the repository pass. Disable application deployment unless all tests succeed.
+    </details>
+
+
+
+    
+
+
+
+
+
+
+
 
 ## Roadmap
 - Many to many relation
