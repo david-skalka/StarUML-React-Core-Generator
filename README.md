@@ -84,9 +84,8 @@ Model-Driven Development (MDD) generators enhance productivity, improve code qua
   </details>
   <details>
     <summary>Test-Driven Development (TDD)</summary>
-    Use execution tests for customizing API actions, rather than using Swagger UI or the React client.
-    Insights TDD application: Use the test coverage report for insights into the application architecture and its test cases.
-    Benefits: TDD provides faster development and improved code quality through easier refactoring. Ensures bugs are detected and fixed early, resulting in a more robust and maintainable codebase.
+    Utilize execution tests to customize API actions instead of using Swagger UI or the React client. For insights into the TDD application, refer to the test coverage report, which provides valuable information about the application's architecture and its test cases.
+    Benefits: TDD facilitates faster development and enhances code quality by making refactoring easier. It ensures that bugs are detected and resolved early, resulting in a more robust and maintainable codebase.
   </details>
     
 
