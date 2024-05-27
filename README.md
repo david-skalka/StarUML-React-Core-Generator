@@ -23,13 +23,13 @@ Model-Driven Development (MDD) generators enhance productivity, improve code qua
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/wPTYLHBJA1Q/0.jpg)](https://www.youtube.com/watch?v=wPTYLHBJA1Q)
 
 ## Features
-- Generate complete application
-- Generate integration test
-- Generate test data seed using fakerjs
-- Generate extra actions from @UMLClass operations (e.g. SQL aggregation actions)
-- Simple and modificable
-- Robus @UMLModel validation
-- Fast template development using Jest runner
+- Generate complete application.
+- Generate integration tests.
+- Generate test data seeds using Faker.js.
+- Generate extra actions from @UMLClass operations (e.g., SQL aggregation actions).
+- Simple and modifiable.
+- Robust @UMLModel validation.
+- Fast template development using Jest runner.
 
 ## Primitive types
 - Integer
@@ -74,9 +74,7 @@ Model-Driven Development (MDD) generators enhance productivity, improve code qua
   </details>
   <details>
     <summary>Customization</summary>
-    Create Prototype: Focus on entity relationships and validate them.
-    Specify Action Behavior: Customize the specified actions and then make minor UI changes.
-    Code Merging: Be cautious when fully customizations before modifying the UML model.
+    Create Prototype: Focus on entity relationships and validate them. Specify Action Behavior: Customize the specified actions, then make minor UI changes. Code Merging: Be cautious with full customizations before modifying the UML model.
   </details>
   <details>
   <summary>Continuous Application Updates</summary>
