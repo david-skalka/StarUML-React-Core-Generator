@@ -12,9 +12,9 @@
 
 ## Motivation
 
-Custom Model-Driven Development (MDD) generators with auto-generated fake data tests significantly enhance productivity, improve code quality, and foster better collaboration and communication. By leveraging MDD generators, development speed can be accelerated by 2 to 5 times or more compared to traditional software development approaches. Automatic tests with auto-generated fake data further boost development speed by enabling faster code instantiation.
+Model-Driven Development (MDD) generators enhance productivity, improve code quality, and foster better collaboration and communication. By leveraging MDD generators, development speed can be accelerated by 2 to 5 times or more compared to traditional software development approaches.
 
-### Benefits of Custom Code Generator over JHipster
+### Benefits of Custom Code Generator
 - Tailored Solutions: Custom code generators can be tailored specifically to the needs of a particular project or organization, providing greater flexibility and customization options.
 - Optimized Code: With custom code generators, developers have more control over the generated code, allowing for optimization of performance, scalability, and maintainability based on project requirements.
 - Integration with Existing Systems: Custom code generators can be seamlessly integrated with existing systems, ensuring smoother transitions and better compatibility with legacy infrastructure.
@@ -85,7 +85,7 @@ Custom Model-Driven Development (MDD) generators with auto-generated fake data t
   <details>
     <summary>Test-Driven Development (TDD)</summary>
     Use execution tests for customizing API actions, rather than using Swagger UI or the React client.
-    Insights TDD application: Ensure 100% test coverage for your application. Use the test coverage report for insights into the application architecture and its test cases.
+    Insights TDD application: Use the test coverage report for insights into the application architecture and its test cases.
     Benefits: TDD provides faster development and improved code quality through easier refactoring. Ensures bugs are detected and fixed early, resulting in a more robust and maintainable codebase.
   </details>
     
