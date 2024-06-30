@@ -1462,7 +1462,7 @@
 					},
 					"name": "Namespace",
 					"kind": "string",
-					"value": "ReactSample"
+					"value": "ReactSampleStar"
 				}
 			],
 			"stereotype": {
