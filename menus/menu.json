@@ -4,45 +4,9 @@
             "id": "tools",
             "submenu": [
                 {
-                    "label": "React Core",
-                    "id": "react-core",
-                    "submenu": [
-                        {
-                            "label": "Generate solution",
-                            "id": "react-core.generate-solution",
-                            "command": "react-core:generate-solution"
-                        },
-                        {
-                            "label": "Generate db context",
-                            "id": "react-core.generate-db-context",
-                            "command": "react-core:generate-db-context"
-                        },
-                        {
-                            "label": "Generate test seeder",
-                            "id": "react-core.generate-seeder",
-                            "command": "react-core:generate-seeder"
-                        },
-                        {
-                            "label": "Generate setup proxy",
-                            "id": "react-core.generate-setup-proxy",
-                            "command": "react-core:generate-setup-proxy"
-                        },
-                        {
-                            "label": "Generate app routes",
-                            "id": "react-core.generate-app-routes",
-                            "command": "react-core:generate-app-routes"
-                        },
-                        {
-                            "label": "Generate nav menu",
-                            "id": "react-core.generate-nav-menu",
-                            "command": "react-core:generate-nav-menu"
-                        },
-                        {
-                            "label": "Generate entity",
-                            "id": "react-core.generate-entity",
-                            "command": "react-core:generate-entity"
-                        }
-                    ]
+                    "label": "React Core Generator",
+                    "id": "react-core.generate",
+                    "command": "react-core:generate"
                 }
             ]
         }
