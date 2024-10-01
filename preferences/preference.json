@@ -2,8 +2,8 @@
     "id": "react-core",
     "name": "React Core",
     "schema": {
-      "react-core.solution-path": {
-        "text": "Solution path",
+      "react-core.output-directory": {
+        "text": "Output directory",
         "type": "string",
         "default": ""
       }
