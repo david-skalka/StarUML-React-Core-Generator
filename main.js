@@ -1,19 +1,14 @@
 const fs = require("fs");
-const beautify = require("json-beautify");
 const { faker } = require("@faker-js/faker");
 const { Case } = require('change-case-all');
 const { modelSchema, classesSchema } = require('./joi-schemas.js');
 const _csharp = require("./templates/api/_csharp.js");
-const _deepCopy = require('./deep-copy.js');
 const _star = require("./templates/_starHelpers");
 const { CommandShell, CommandRm, CommandMkdir, CommandEjs } = require("./commands");
 
+function validateDiagram() {
 
-
-function validate() {
-
-
-  const diagram = app.selections.getSelectedModels()
+  const diagram = app.repository.select("@UMLModel").filter(x => x.stereotype && x.stereotype.name === "ReactCoreGen");
 
 
   if (diagram.length === 0) {
@@ -43,40 +38,50 @@ function validate() {
 
 
 
-  if (!fs.existsSync(getOutputDir())) {
-    return "Output directory does not exist";
-  }
+
 
 
   return null;
 }
 
 
-function getOutputDir() {
-  const config = app.preferences.get('react-core.output-directory', '');
-  return config.endsWith('\\') ? config.slice(0, -1) : config;
-}
 
 function init() {
 
   app.commands.register(
     "react-core:generate",
-    async () => {
+    async (args) => {
 
 
+      const _params = new Map();
+      
+      args.split(';').forEach((pair) => {
+        const [key, value] = pair.split('=');
+        _params.set(key, value);
+      });
 
+      
+      var outputDir =  _params.get('output') ||  (await app.dialogs.showInputDialog("Enter output directory.")).returnValue;
 
-      const validationResult = validate();
+      if(outputDir.endsWith('\\')){
+        outputDir = outputDir.slice(0, -1)
+      }
 
- 
+  
+      if (!fs.existsSync(outputDir)) {
+        app.dialogs.showInfoDialog("Output directory does not exist");
+        return;
+      }
+
+      const validationResult = validateDiagram();
 
       if (validationResult) {
         app.dialogs.showInfoDialog(validationResult);
         return;
       }
 
-      const diagram = app.selections.getSelectedModels()[0];
-      const outputDir = getOutputDir();
+      const diagram = app.repository.select("@UMLModel").find(x => x.stereotype && x.stereotype.name === "ReactCoreGen");
+      
       const entities = app.repository.select("@UMLClass").filter(x => x.stereotype && x.stereotype.name === "Entity")
       const namespace = diagram.tags.find(x => x.name === "Namespace").value;
 
@@ -100,12 +105,15 @@ function init() {
         new CommandMkdir(outputDir + '\\IntegrationTest\\Seeders'),
         new CommandMkdir(outputDir + '\\Web\\Models'),
         new CommandMkdir(outputDir + '\\Web\\ApiModels'),
-        new CommandEjs('/templates/api/program.ejs', outputDir + `\\Web\\Program.cs`, { info: { namespace: namespace } }),
+             new CommandEjs( '/templates/api/program.ejs', outputDir + `\\Web\\Program.cs`, { info: { namespace: namespace } }),
         new CommandEjs('/templates/api/custom-web-app-factory.ejs', outputDir + `\\IntegrationTest\\CustomWebApplicationFactory.cs`, { info: { namespace: namespace } }),
         new CommandEjs('/templates/api/iseeder.ejs', outputDir + `\\IntegrationTest\\ISeeder.cs`, { info: { namespace: namespace } }),
+        new CommandRm( outputDir + `\\Web\\ClientApp\\src\\setupProxy.js`),
+        new CommandRm( outputDir + `\\Web\\ClientApp\\src\\AppRoutes.js`),
+        new CommandRm(outputDir + `\\Web\\ClientApp\\src\\components\\NavMenu.js`),
 
       ]).set('db-context', [
-        new CommandEjs('/templates/api/db-context.ejs', outputDir + `\\Web\\ApplicationDbcs`, { info: { namespace: namespace }, entities: entities })
+        new CommandEjs('/templates/api/db-context.ejs', outputDir + `\\Web\\ApplicationDbContext.cs`, { info: { namespace: namespace }, entities: entities })
       ]).set('seeder', [
         new CommandEjs('/templates/api/seeder.ejs', outputDir + `\\IntegrationTest\\Seeders\\DefaultSeeder.cs`, { count: 10, entities: entities, info: { namespace: namespace }, faker, _csharp })
       ]).set('setup-proxy', [
@@ -139,22 +147,18 @@ function init() {
         pipeline.set('entity-' + entity.name, entityCmds)
       });
 
+ 
+
 
       const options = [{ text: '- all -', value: '.*' }].concat(Array.from(pipeline.keys().map((key, i) => { return { text: key, value: key } })))
-
-      const { buttonId, returnValue } = await app.dialogs.showSelectRadioDialog("Select part.", options)
-
-
-      if (buttonId !== 'ok') {
-        return;
-      }
-
-
+      const parts = _params.get('parts') || (await app.dialogs.showSelectRadioDialog("Select part.", options)).returnValue;
+        
+      
       try {
 
-        for (part of pipeline.keys().filter(x => x.match(returnValue))) {
+        for (part of pipeline.keys().filter(x => x.match(parts))) {
           for (command of pipeline.get(part)) {
-            await command.execute();
+            command.execute();
           }
         }
 
@@ -165,29 +169,13 @@ function init() {
       }
 
 
-
-
-
     },
     "Generate Project"
   );
 
 
-  app.commands.register(
-    "react-core:export-metadata",
-    (arg) => {
-      var cls = app.repository.select("@UMLClass")
-      const clss = _deepCopy(cls, 20, 0, ['_parent']);
-      fs.writeFileSync(arg, beautify(clss, null, 2, 100));
-    },
-    "Export metadata"
-  );
-
 
 }
-
-
-
 
 
 

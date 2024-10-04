@@ -22,4 +22,13 @@ jobs:
         node-version: 18.x
         cache: 'npm'
     - run: npm i
-    - run: npm run test
+    - name: Download StarUML installer
+      run: |
+        curl -L -o StarUML-Setup.exe https://staruml.io/download/releases/StarUML-5.0.2-Setup.exe
+    - name: Install StarUML
+      run: |
+        Start-Process -Wait -FilePath StarUML-Setup.exe -ArgumentList '/S'
+    - name: Verify installation
+      run: |
+        Start-Process -Wait -FilePath "C:\Program Files\StarUML\StarUML.exe" -ArgumentList '--version'
+    

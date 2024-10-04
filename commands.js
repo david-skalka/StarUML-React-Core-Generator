@@ -1,7 +1,7 @@
 
 const path = require("path");
 const util = require('util');
-const exec = util.promisify(require('child_process').exec);
+const execSync = util.promisify(require('child_process').execSync);
 const ejs = require("ejs");
 const fs = require("fs");
 
@@ -15,7 +15,7 @@ class CommandShell {
   
     async execute() {
       app.toast.info("Shell: " + this.cmd);
-      await exec(this.cmd, this.opt);
+      execSync(this.cmd, this.opt);
     }
   }
   
@@ -51,7 +51,11 @@ class CommandShell {
   
     async execute() {
       app.toast.info("Template: " + this.dest);
-      const rendered = await ejs.renderFile(path.join(__dirname, this.src), this.vars);
+      const templatePath = path.join(__dirname, this.src);
+      const template = fs.readFileSync(templatePath, 'utf8');
+      const rendered = ejs.render(template, this.vars, { filename: templatePath });
+
+      
   
       if (fs.existsSync(this.dest)) {
         var buttonId = app.dialogs.showConfirmDialog("Are you sure to " + this.dest, "overwrite")
