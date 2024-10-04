@@ -25,9 +25,12 @@ jobs:
     - name: Download StarUML installer
       run: |
         curl -L -o StarUML-Setup.exe https://staruml.io/api/download/releases-v6/StarUML%20Setup%206.2.2.exe
-    - name: Install StarUML
+    - name: ExecutionPolicy
       run: |
         Set-ExecutionPolicy Bypass -Scope Process -Force
+      shell: powershell
+    - name: Install StarUML
+      run: |
         ./StarUML-Setup.exe /S
     - name: Verify installation
       run: C:/Program Files/StarUML/StarUML.exe --version
