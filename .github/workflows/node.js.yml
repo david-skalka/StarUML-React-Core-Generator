@@ -28,7 +28,7 @@ jobs:
     - name: ExecutionPolicy
       run: |
         Set-ExecutionPolicy Bypass -Scope Process -Force
-      shell: powershell
+      shell: pwsh
     - name: Install StarUML
       run: |
         ./StarUML-Setup.exe /S
