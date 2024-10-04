@@ -29,5 +29,5 @@ jobs:
       run: |
         StarUML-Setup.exe /S
     - name: Verify installation
-      run: "C:/Program Files/StarUML/StarUML.exe" --version
+      run: C:/Program Files/StarUML/StarUML.exe --version
     
