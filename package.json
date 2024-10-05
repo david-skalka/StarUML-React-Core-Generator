@@ -25,13 +25,18 @@
   "dependencies": {
     "@faker-js/faker": "^8.4.1",
     "change-case-all": "^2.1.0",
+    "copy-to-clipboard": "^3.3.3",
     "ejs": "^3.1.9",
-    "joi": "^17.12.2"
+    "joi": "^17.12.2",
+    "json-beautify": "^1.1.1",
+    "json-stringify-safe": "^5.0.1"
   },
   "devDependencies": {
     "ejs-lint": "^2.0.0",
     "jest": "^29.7.0"
   },
   "scripts": {
+    "test": "jest",
+    "export-metadata": "staruml exec test\\data\\sample.mdj -a test\\data\\sample.json -c react-core:export-metadata"
   }
 }
