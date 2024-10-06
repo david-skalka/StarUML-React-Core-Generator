@@ -1,7 +1,7 @@
 
 const path = require("path");
 const util = require('util');
-const execSync = util.promisify(require('child_process').execSync);
+const exec = util.promisify(require('child_process').exec);
 const ejs = require("ejs");
 const fs = require("fs");
 
@@ -15,7 +15,7 @@ class CommandShell {
   
     async execute() {
       app.toast.info("Shell: " + this.cmd);
-      execSync(this.cmd, this.opt);
+      await exec(this.cmd, this.opt);
     }
   }
   

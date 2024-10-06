@@ -105,7 +105,7 @@ function init() {
         new CommandEjs('/templates/api/iseeder.ejs', outputDir + `\\IntegrationTest\\ISeeder.cs`, { info: { namespace: namespace } }),
 
       ]).set('db-context', [
-        new CommandEjs('/templates/api/db-context.ejs', outputDir + `\\Web\\ApplicationDbcs`, { info: { namespace: namespace }, entities: entities })
+        new CommandEjs('/templates/api/db-context.ejs', outputDir + `\\Web\\ApplicationDbContext.cs`, { info: { namespace: namespace }, entities: entities })
       ]).set('seeder', [
         new CommandEjs('/templates/api/seeder.ejs', outputDir + `\\IntegrationTest\\Seeders\\DefaultSeeder.cs`, { count: 10, entities: entities, info: { namespace: namespace }, faker, _csharp })
       ]).set('setup-proxy', [
