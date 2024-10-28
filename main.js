@@ -6,7 +6,7 @@ const { modelSchema, classesSchema } = require('./joi-schemas.js');
 const _csharp = require("./templates/api/_csharp.js");
 const _deepCopy = require('./deep-copy.js');
 const _star = require("./templates/_starHelpers");
-const { CommandShell, CommandRm, CommandMkdir, CommandEjs } = require("./commands");
+const { CommandShell, CommandRm, CommandMkdir, CommandEjs, MultiCommand } = require("./commands");
 
 
 
@@ -82,7 +82,7 @@ function init() {
 
 
       const pipeline = new Map();
-      pipeline.set('solution', [
+      pipeline.set('solution', new MultiCommand([
         new CommandShell('dotnet new sln -n ' + namespace + ' -o "' + outputDir + '"'),
         new CommandShell('dotnet new react -f net6.0 -n ' + namespace + ' -o "' + outputDir + '\\Web"'),
         new CommandShell('npm i react-bootstrap', { cwd: outputDir + '\\Web\\ClientApp' }),
@@ -104,17 +104,11 @@ function init() {
         new CommandEjs('/templates/api/custom-web-app-factory.ejs', outputDir + `\\IntegrationTest\\CustomWebApplicationFactory.cs`, { info: { namespace: namespace } }),
         new CommandEjs('/templates/api/iseeder.ejs', outputDir + `\\IntegrationTest\\ISeeder.cs`, { info: { namespace: namespace } }),
 
-      ]).set('db-context', [
-        new CommandEjs('/templates/api/db-context.ejs', outputDir + `\\Web\\ApplicationDbContext.cs`, { info: { namespace: namespace }, entities: entities })
-      ]).set('seeder', [
-        new CommandEjs('/templates/api/seeder.ejs', outputDir + `\\IntegrationTest\\Seeders\\DefaultSeeder.cs`, { count: 10, entities: entities, info: { namespace: namespace }, faker, _csharp })
-      ]).set('setup-proxy', [
-        new CommandEjs('/templates/react/setup-proxy.ejs', outputDir + `\\Web\\ClientApp\\src\\setupProxy.js`, { entities: entities, _case: Case })
-      ]).set('app-routes', [
-        new CommandEjs('/templates/react/app-routes.ejs', outputDir + `\\Web\\ClientApp\\src\\AppRoutes.js`, { entities: entities, _case: Case })
-      ]).set('nav-menu', [
-        new CommandEjs('/templates/react/nav-menu.ejs', outputDir + `\\Web\\ClientApp\\src\\components\\NavMenu.js`, { entities: entities, _case: Case })
-      ]);
+      ])).set('db-context', new CommandEjs('/templates/api/db-context.ejs', outputDir + `\\Web\\ApplicationDbContext.cs`, { info: { namespace: namespace }, entities: entities }))
+         .set('seeder',  new CommandEjs('/templates/api/seeder.ejs', outputDir + `\\IntegrationTest\\Seeders\\DefaultSeeder.cs`, { count: 10, entities: entities, info: { namespace: namespace }, faker, _csharp }))
+         .set('setup-proxy', new CommandEjs('/templates/react/setup-proxy.ejs', outputDir + `\\Web\\ClientApp\\src\\setupProxy.js`, { entities: entities, _case: Case }))
+         .set('app-routes', new CommandEjs('/templates/react/app-routes.ejs', outputDir + `\\Web\\ClientApp\\src\\AppRoutes.js`, { entities: entities, _case: Case }))
+         .set('nav-menu', new CommandEjs('/templates/react/nav-menu.ejs', outputDir + `\\Web\\ClientApp\\src\\components\\NavMenu.js`, { entities: entities, _case: Case }));
 
       entities.forEach(entity => {
 
@@ -136,7 +130,7 @@ function init() {
           ]
           ))
 
-        pipeline.set('entity-' + entity.name, entityCmds)
+        pipeline.set('entity-' + entity.name, new MultiCommand(entityCmds))
       });
 
 
@@ -152,10 +146,8 @@ function init() {
 
       try {
 
-        for (part of pipeline.keys().filter(x => x.match(returnValue))) {
-          for (command of pipeline.get(part)) {
-            await command.execute();
-          }
+        for (const part of pipeline.keys().filter(x => x.match(returnValue))) {
+          await pipeline.get(part).execute();
         }
 
         app.toast.info("Done");

@@ -69,10 +69,25 @@ class CommandShell {
   
     }
   }
+
+
+  class MultiCommand {
+    constructor(commands) {
+      this.commands = commands;
+    }
+  
+  
+    async execute() {
+      for (const command of this.commands) {
+        await command.execute();
+      }
+    }
+  }
   
 
   exports.CommandShell = CommandShell;
   exports.CommandRm = CommandRm;
   exports.CommandMkdir = CommandMkdir;
   exports.CommandEjs = CommandEjs;
+  exports.MultiCommand = MultiCommand
   
